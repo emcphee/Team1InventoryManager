@@ -15,7 +15,7 @@ CREATE TABLE Warehouse (
 
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,sername VARCHAR(255) NOT NULL,
-
+    Email VARCHAR(255),
     PasswordHash VARBINARY(123) NOT NULL,  -- change length depending on the hashing algo chosen later 
     Salt VARBINARY(123) NOT NULL  -- change salt length to whatever when implementing hashing later 
 );
@@ -35,7 +35,6 @@ CREATE TABLE ItemCategories (
     PRIMARY KEY (CategoryName, WarehouseID),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
 );
-
 
 CREATE TABLE Items (
     ItemID INT IDENTITY(1,1) PRIMARY KEY,
