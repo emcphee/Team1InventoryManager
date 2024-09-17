@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS R_Items_ItemCategories;
 DROP TABLE IF EXISTS Logs;
 DROP TABLE IF EXISTS UserPermissions;
 DROP TABLE IF EXISTS Items;
@@ -10,12 +11,15 @@ CREATE TABLE Warehouse (
     WarehouseID INT IDENTITY(1,1) PRIMARY KEY,
     
     -- add other info about the warehouse if needed
+	Name VARCHAR(255),
     Address VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE Users (
-    UserID INT IDENTITY(1,1) PRIMARY KEY,sername VARCHAR(255) NOT NULL,
-    Email VARCHAR(255),
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+	
+	Username VARCHAR(255) NOT NULL,
+    
     PasswordHash VARBINARY(123) NOT NULL,  -- change length depending on the hashing algo chosen later 
     Salt VARBINARY(123) NOT NULL  -- change salt length to whatever when implementing hashing later 
 );
@@ -30,9 +34,9 @@ CREATE TABLE UserPermissions (
 );
 
 CREATE TABLE ItemCategories (
+    CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoryName VARCHAR(255),
     WarehouseID INT,
-    PRIMARY KEY (CategoryName, WarehouseID),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
 );
 
@@ -43,6 +47,14 @@ CREATE TABLE Items (
     WarehouseID INT,
     CategoryName VARCHAR(255),
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
+);
+
+CREATE TABLE R_Items_ItemCategories (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryID INT NOT NULL,
+    ItemID INT NOT NULL,
+    FOREIGN KEY (CategoryID) REFERENCES ItemCategories(CategoryID),
+    FOREIGN KEY (ItemID) REFERENCES Items(ItemID),
 );
 
 CREATE TABLE Logs (
