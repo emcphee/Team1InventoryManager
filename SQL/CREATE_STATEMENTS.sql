@@ -1,0 +1,58 @@
+DROP TABLE IF EXISTS Logs;
+DROP TABLE IF EXISTS UserPermissions;
+DROP TABLE IF EXISTS Items;
+DROP TABLE IF EXISTS ItemCategories;
+
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Warehouse;
+
+CREATE TABLE Warehouse (
+    WarehouseID INT IDENTITY(1,1) PRIMARY KEY,
+    
+    -- add other info about the warehouse if needed
+    Address VARCHAR(255) NOT NULL,
+);
+
+CREATE TABLE Users (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,sername VARCHAR(255) NOT NULL,
+
+    PasswordHash VARBINARY(123) NOT NULL,  -- change length depending on the hashing algo chosen later 
+    Salt VARBINARY(123) NOT NULL  -- change salt length to whatever when implementing hashing later 
+);
+
+CREATE TABLE UserPermissions (
+    UserID INT,
+    WarehouseID INT,
+    Permission INT CHECK (Permission IN (1, 2, 3)), -- 1=admin 2=editor 3=viewer
+    PRIMARY KEY (UserID, WarehouseID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
+);
+
+CREATE TABLE ItemCategories (
+    CategoryName VARCHAR(255),
+    WarehouseID INT,
+    PRIMARY KEY (CategoryName, WarehouseID),
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Items (
+    ItemID INT IDENTITY(1,1) PRIMARY KEY,
+    ItemName VARCHAR(255) NOT NULL,
+    Amount INT NOT NULL CHECK (Amount >= 0),
+    WarehouseID INT,
+    CategoryName VARCHAR(255),
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
+);
+
+CREATE TABLE Logs (
+    LogID INT IDENTITY(1,1) PRIMARY KEY,
+    ItemID INT,
+    Amount INT CHECK (Amount <> 0),  -- ensure nonzero value
+    WarehouseID INT,
+    MovementDate DATETIME DEFAULT GETDATE(),
+    UserID INT,  -- user responsible for the movement
+    FOREIGN KEY (ItemID) REFERENCES Items(ItemID) ON DELETE CASCADE,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE SET NULL  -- becomes NULL if the user is deleted
+);
