@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\controllers\\useraccountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\controllers\\useraccountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Models\\WarehouseInventoryManagementDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:WarehouseInventoryManager\\Models\\WarehouseInventoryManagementDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\dtos\\registermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\dtos\\registermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -29,6 +37,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\warehouseinventorymanager.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
       "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\warehouseinventorymanager.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|c:\\users\\etani\\3d objects\\revature\\team1inventorymanager\\warehouseinventorymanager\\warehouseinventorymanager\\models\\warehouseinventorymanagementdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9F1195F-61FB-4D9B-9A35-615CB2CC4488}|WarehouseInventoryManager\\WarehouseInventoryManager.csproj|solutionrelative:warehouseinventorymanager\\models\\warehouseinventorymanagementdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,7 +58,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "RegisterModel.cs",
+              "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\DTOs\\RegisterModel.cs",
+              "RelativeDocumentMoniker": "WarehouseInventoryManager\\DTOs\\RegisterModel.cs",
+              "ToolTip": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\DTOs\\RegisterModel.cs",
+              "RelativeToolTip": "WarehouseInventoryManager\\DTOs\\RegisterModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T21:45:29.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "WarehouseInventoryManager\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "WarehouseInventoryManager\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T21:42:31.904Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserAccountController.cs",
+              "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Controllers\\UserAccountController.cs",
+              "RelativeDocumentMoniker": "WarehouseInventoryManager\\Controllers\\UserAccountController.cs",
+              "ToolTip": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Controllers\\UserAccountController.cs",
+              "RelativeToolTip": "WarehouseInventoryManager\\Controllers\\UserAccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T21:41:37.648Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "WarehouseInventoryManagementDbContext.cs",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Models\\WarehouseInventoryManagementDbContext.cs",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\Models\\WarehouseInventoryManagementDbContext.cs",
@@ -54,25 +105,24 @@
               "RelativeToolTip": "WarehouseInventoryManager\\Models\\WarehouseInventoryManagementDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T21:23:18.835Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-18T21:23:18.835Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\appsettings.json",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\appsettings.json",
               "ToolTip": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\appsettings.json",
               "RelativeToolTip": "WarehouseInventoryManager\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-09-18T21:06:17.794Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\appsettings.Development.json",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\appsettings.Development.json",
@@ -84,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "DBMigrateInstructions.txt",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\DBMigrateInstructions.txt",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\DBMigrateInstructions.txt",
@@ -96,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "WeatherForecast.cs",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\WeatherForecast.cs",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\WeatherForecast.cs",
@@ -109,7 +159,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "WarehouseInventoryManager",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager.csproj",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\WarehouseInventoryManager.csproj",
@@ -120,13 +170,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Program.cs",
               "RelativeDocumentMoniker": "WarehouseInventoryManager\\Program.cs",
               "ToolTip": "C:\\Users\\etani\\3D Objects\\revature\\Team1InventoryManager\\WarehouseInventoryManager\\WarehouseInventoryManager\\Program.cs",
               "RelativeToolTip": "WarehouseInventoryManager\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-17T21:43:44.808Z",
               "EditorCaption": ""
