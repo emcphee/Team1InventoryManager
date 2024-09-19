@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "WarehouseInventoryManager.Controllers.UserAccountController",
+    "Method": "Register",
+    "RelativePath": "api/UserAccount/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "WarehouseInventoryManager.DTOs.RegisterModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WarehouseInventoryManager.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
