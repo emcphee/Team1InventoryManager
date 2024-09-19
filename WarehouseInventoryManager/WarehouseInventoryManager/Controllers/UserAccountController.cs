@@ -22,10 +22,10 @@ namespace WarehouseInventoryManager.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public IActionResult Register([FromBody] LoginModel model)
         {
             // reject if username already exists
-            if(_context.Users.FirstOrDefault(u => u.Username == model.Username) != null)
+            if (_context.Users.FirstOrDefault(u => u.Username == model.Username) != null)
             {
                 return BadRequest("User already exists");
             }
@@ -39,7 +39,7 @@ namespace WarehouseInventoryManager.Controllers
                 // store (username, pass, hash) in db
                 User newUser = new User(model.Username, hash, salt);
                 _context.Users.Add(newUser);
-                await _context.SaveChangesAsync(); // only async because the function breaks if it contains no asyncs lol
+                _context.SaveChanges();
             }
             catch
             {
@@ -48,7 +48,25 @@ namespace WarehouseInventoryManager.Controllers
             }
 
             // user has been successfully added to db
-            return Ok(new {username = model.Username, authToken = "abc"});
+            return Ok(new { username = model.Username, authToken = "abc" });
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginModel model)
+        {
+            User? user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
+
+            if (user == null)
+            {
+                return BadRequest("Incorrect Password"); // user doesn't exist, but should not disclose to everyone which usernames exist
+            }
+
+            if (!CryptoUtils.CheckPassword(model.Password, user.Salt, user.PasswordHash))
+            {
+                return BadRequest("Incorrect Password");
+            }
+
+            return Ok(new { username = model.Username, authToken = "abc" });
         }
     }
 }
