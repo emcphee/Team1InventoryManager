@@ -19,7 +19,7 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:7271/api/UserAccount/register', {
+      const response = await fetch('https://localhost:7271/api/UserAccount/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
