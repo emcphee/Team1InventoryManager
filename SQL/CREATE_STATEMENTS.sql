@@ -20,8 +20,8 @@ CREATE TABLE Users (
 	
 	Username VARCHAR(255) NOT NULL,
     
-    PasswordHash VARBINARY(123) NOT NULL,  -- change length depending on the hashing algo chosen later 
-    Salt VARBINARY(123) NOT NULL  -- change salt length to whatever when implementing hashing later 
+    PasswordHash VARBINARY(32) NOT NULL,  -- change length depending on the hashing algo (currently SHA256 = 32bytes)
+    Salt VARBINARY(16) NOT NULL  -- change salt length if changed
 );
 
 CREATE TABLE UserPermissions (
