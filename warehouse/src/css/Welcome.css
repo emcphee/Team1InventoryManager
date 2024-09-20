@@ -1,0 +1,19 @@
+.welcome {
+    background-image: url('background.jpg');
+    background-size: 100% 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  .welcome-message {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px;
+    text-align: center;
+  }
