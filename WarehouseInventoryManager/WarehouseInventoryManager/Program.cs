@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseInventoryManager;
 using WarehouseInventoryManager.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,14 +9,25 @@ builder.Services.AddDbContext<WarehouseInventoryManagementDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+// Configure Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "SessionToken"; 
+        options.Cookie.SameSite = SameSiteMode.None; // allow cross-site
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);  // 30 minute timeout
+        options.SlidingExpiration = true; // timeout timer refreshes on activity
+    });
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowReact", builder =>
     {
         builder
-            .AllowAnyOrigin() 
+            .WithOrigins("http://localhost:3000") 
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -37,8 +49,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowReact");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

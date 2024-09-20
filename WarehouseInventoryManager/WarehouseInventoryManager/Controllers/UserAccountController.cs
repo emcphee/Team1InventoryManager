@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using WarehouseInventoryManager.DTOs;
 using WarehouseInventoryManager.Models;
 using WarehouseInventoryManager.Utils;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace WarehouseInventoryManager.Controllers
 {
@@ -22,7 +25,7 @@ namespace WarehouseInventoryManager.Controllers
 
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] LoginModel model)
+        public async Task<IActionResult> RegisterAsync([FromBody] LoginModel model)
         {
             // reject if username already exists
             if (_context.Users.FirstOrDefault(u => u.Username == model.Username) != null)
@@ -47,8 +50,28 @@ namespace WarehouseInventoryManager.Controllers
                 return BadRequest("Error in processing registration parameters");
             }
 
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, model.Username),
+                    // Add additional claims as needed
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true, // Persist the cookie across sessions
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
             // user has been successfully added to db
-            return Ok(new { username = model.Username, authToken = "abc" });
+            return Ok(new { username = model.Username });
         }
 
         [HttpPost("login")]
@@ -66,7 +89,16 @@ namespace WarehouseInventoryManager.Controllers
                 return BadRequest("Incorrect Password");
             }
 
-            return Ok(new { username = model.Username, authToken = "abc" });
+
+            return Ok(new { username = model.Username });
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok("Logged out");
         }
     }
 }
