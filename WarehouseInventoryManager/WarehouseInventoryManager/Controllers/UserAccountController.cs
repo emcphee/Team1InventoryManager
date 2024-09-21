@@ -21,7 +21,7 @@ namespace WarehouseInventoryManager.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] LoginModel model)
+        public async Task<IActionResult> RegisterAsync([FromBody] LoginDTO model)
         {
             User newUser;
                 // reject if username already exists
@@ -71,7 +71,7 @@ namespace WarehouseInventoryManager.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginModel model)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO model)
         {
             User? user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
 

@@ -16,7 +16,7 @@ namespace WarehouseInventoryManager.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] WarehouseModel model)
+        public IActionResult Create([FromBody] WarehouseCreateDTO model)
         {
             if (CurrentUser == null) return Unauthorized("Invalid session or user not found");
 
@@ -40,6 +40,30 @@ namespace WarehouseInventoryManager.Controllers
             }
 
             return Ok();
+        }
+
+        // if we want to returns the UserPermissioon level of each Warehouse along with it, we should create a View, but otherwise dont need one.
+        [HttpPost("list")]
+        public IActionResult ListWarehouses([FromBody] WarehouseListDTO model)
+        {
+            if (CurrentUser == null) return Unauthorized("Invalid session or user not found");
+            
+            // LINQ query generates a list of all Warehouses the requester has permissions for
+            var query = from warehouse in _context.Warehouses
+                        join permission in _context.UserPermissions
+                        on warehouse.WarehouseId equals permission.WarehouseId
+                        where permission.UserId == 1
+                        select new WarehouseDTO
+                        {
+                            WarehouseId = warehouse.WarehouseId,
+                            Name = warehouse.Name,
+                            Address = warehouse.Address,
+                            PermissionLevel = permission.Permission
+                        };
+            List<WarehouseDTO> list = query.ToList();
+            var result = new WarehouseListDTO(list);
+
+            return Ok(result);
         }
     }
 }
