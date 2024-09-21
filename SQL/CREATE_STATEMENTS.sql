@@ -11,7 +11,7 @@ CREATE TABLE Warehouse (
     WarehouseID INT IDENTITY(1,1) PRIMARY KEY,
     
     -- add other info about the warehouse if needed
-	Name VARCHAR(255),
+	Name VARCHAR(255) NOT NULL,
     Address VARCHAR(255) NOT NULL,
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE Users (
 CREATE TABLE UserPermissions (
     UserID INT,
     WarehouseID INT,
-    Permission INT CHECK (Permission IN (1, 2, 3)), -- 1=admin 2=editor 3=viewer
+    Permission INT CHECK (Permission IN (1, 2, 3)) NOT NULL, -- 1=admin 2=editor 3=viewer
     PRIMARY KEY (UserID, WarehouseID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
