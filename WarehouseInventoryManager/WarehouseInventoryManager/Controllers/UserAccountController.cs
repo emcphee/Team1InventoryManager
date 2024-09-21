@@ -14,15 +14,11 @@ namespace WarehouseInventoryManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserAccountController : ControllerBase
+    public class UserAccountController : InventoryManagerBaseController 
     {
-        private readonly WarehouseInventoryManagementDbContext _context;
-        public UserAccountController(WarehouseInventoryManagementDbContext context)
+        public UserAccountController(WarehouseInventoryManagementDbContext context) : base(context)
         {
-            _context = context;
         }
-
-
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] LoginModel model)
