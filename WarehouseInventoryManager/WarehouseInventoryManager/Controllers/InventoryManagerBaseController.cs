@@ -28,5 +28,23 @@ namespace WarehouseInventoryManager.Controllers
                 return _context.Users.Find(userID);
             }
         }
+
+        protected enum Permissionlevel
+        {
+            Admin = 1,
+            Editor = 2,
+            Viewer = 3
+        }
+
+        protected bool UserHasPermission(int warehouseId, Permissionlevel requiredPermissionLevel)
+        {
+            if (CurrentUser == null) return false;
+
+            UserPermission? permission = _context.UserPermissions.Where(perm => perm.UserId == CurrentUser.UserId && perm.WarehouseId == warehouseId).FirstOrDefault();
+            
+            if (permission == null) return false;
+
+            return (Permissionlevel)permission.Permission <= requiredPermissionLevel;
+        }
     }
 }

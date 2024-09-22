@@ -31,7 +31,6 @@ public partial class WarehouseInventoryManagementDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //optionsBuilder.UseSqlServer("Server=DESKTOP-EN9FMHH\\SQLEXPRESS;Database=WarehouseInventoryManagementDB;Trusted_Connection=True;TrustServerCertificate=True;User Id=user;Password=password;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

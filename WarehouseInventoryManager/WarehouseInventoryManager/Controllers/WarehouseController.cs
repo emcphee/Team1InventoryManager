@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using WarehouseInventoryManager.Models;
 using WarehouseInventoryManager.DTOs;
 
@@ -15,11 +13,11 @@ namespace WarehouseInventoryManager.Controllers
         {
         }
 
-        [HttpPost("create")]
-        public IActionResult Create([FromBody] WarehouseCreateDTO model)
+        [HttpPost()]
+        public IActionResult CreateWarehouse([FromBody] WarehouseCreateDTO model)
         {
-            if (CurrentUser == null) return Unauthorized("Invalid session or user not found");
-
+            if (CurrentUser == null) return Unauthorized();
+            if (model.Name == null || model.Address == null) return BadRequest();
             try
             {
                 // insert warehouse
@@ -41,12 +39,68 @@ namespace WarehouseInventoryManager.Controllers
 
             return Ok();
         }
-
-        // if we want to returns the UserPermissioon level of each Warehouse along with it, we should create a View, but otherwise dont need one.
-        [HttpPost("list")]
-        public IActionResult ListWarehouses([FromBody] WarehouseListDTO model)
+        
+        // returns warehouse info + all items
+        [HttpGet("{id}")]
+        public IActionResult GetWarehouse(int id)
         {
-            if (CurrentUser == null) return Unauthorized("Invalid session or user not found");
+            if (CurrentUser == null) return Unauthorized();
+            if (!UserHasPermission(id, Permissionlevel.Viewer)) return Unauthorized();
+
+            // create object which contains warehouse info + all items and return here
+
+            return Ok();
+        }
+        
+        // allows an Admin of a warehouse to DELETE a warehouse
+        [HttpDelete("{id}")]
+        public IActionResult DeleteWarehouse(int id)
+        {
+            if (CurrentUser == null) return Unauthorized();
+            var warehouse = _context.Warehouses.Find(id);
+            if (warehouse == null) return NotFound(); 
+            if (!UserHasPermission(id, Permissionlevel.Admin)) return Unauthorized();
+
+            try
+            {
+                _context.Warehouses.Remove(warehouse);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return StatusCode(500, "Error deleting warehouse");
+            }
+
+            return Ok();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PatchWarehouse(int id, [FromBody] WarehouseCreateDTO model)
+        {
+            if (CurrentUser == null) return Unauthorized();
+            if (_context.Warehouses.Find(id) == null) return NotFound();
+            if (!UserHasPermission(id, Permissionlevel.Admin)) return Unauthorized();
+
+            var warehouse = _context.Warehouses.Find(id);
+            if (warehouse == null) return NotFound();
+            try
+            {
+                if (model.Name != null) warehouse.Name = model.Name;
+                if (model.Address != null) warehouse.Address = model.Address;
+                _context.Warehouses.Update(warehouse);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                return StatusCode(500, "Error patching warehouse");
+            }
+            return Ok();
+        }
+
+        [HttpGet("list")]
+        public IActionResult ListWarehouses()
+        {
+            if (CurrentUser == null) return Unauthorized();
             
             // LINQ query generates a list of all Warehouses the requester has permissions for
             var query = from warehouse in _context.Warehouses
@@ -65,5 +119,6 @@ namespace WarehouseInventoryManager.Controllers
 
             return Ok(result);
         }
+
     }
 }
