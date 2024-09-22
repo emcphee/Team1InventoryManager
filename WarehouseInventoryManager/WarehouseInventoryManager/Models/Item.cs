@@ -11,13 +11,11 @@ public partial class Item
 
     public int Amount { get; set; }
 
-    public int? WarehouseId { get; set; }
-
-    public string? CategoryName { get; set; }
+    public int WarehouseId { get; set; }
 
     public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
 
     public virtual ICollection<RItemsItemCategory> RItemsItemCategories { get; set; } = new List<RItemsItemCategory>();
 
-    public virtual Warehouse? Warehouse { get; set; }
+    public virtual Warehouse Warehouse { get; set; } = null!;
 }

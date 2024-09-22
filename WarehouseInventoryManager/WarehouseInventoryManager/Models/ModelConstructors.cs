@@ -27,5 +27,14 @@
             this.Permission = permission;
         }
     }
-    
+
+    public partial class Item
+    {
+        public Item(int warehouseId, int amount, string name)
+        {
+            this.WarehouseId = warehouseId;
+            this.Amount = amount;
+            this.ItemName = name;
+        }
+    } 
 }
