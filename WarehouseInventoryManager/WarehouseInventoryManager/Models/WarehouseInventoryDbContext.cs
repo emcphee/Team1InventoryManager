@@ -69,7 +69,7 @@ public partial class WarehouseInventoryDbContext : DbContext
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A80D481A35");
+            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A84608AFA8");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.ItemId).HasColumnName("ItemID");
@@ -81,12 +81,12 @@ public partial class WarehouseInventoryDbContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK__Logs__ItemID__03BB8E22");
+                .HasConstraintName("FK__Logs__ItemID__10216507");
 
             entity.HasOne(d => d.User).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Logs__UserID__04AFB25B");
+                .HasConstraintName("FK__Logs__UserID__11158940");
         });
 
         modelBuilder.Entity<RItemsItemCategory>(entity =>
