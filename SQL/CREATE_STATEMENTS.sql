@@ -62,8 +62,10 @@ CREATE TABLE Logs (
     ItemID INT NOT NULL,
     Amount INT CHECK (Amount <> 0) NOT NULL,  -- ensure nonzero value
     WarehouseID INT NOT NULL,
-    MovementDate DATETIME DEFAULT GETDATE(),
+    MovementDate DATETIME DEFAULT GETDATE() NOT NULL,
     UserID INT,  -- user responsible for the movement
     FOREIGN KEY (ItemID) REFERENCES Items(ItemID) ON DELETE CASCADE,
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE SET NULL  -- becomes NULL if the user is deleted
 );
+
+
