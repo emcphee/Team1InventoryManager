@@ -4,7 +4,12 @@ import Table from 'react-bootstrap/Table';
 
  function InventoryLog() {
     
-    const [logList, setLogList] = useState([]);
+    const [logList, setLogList] = useState([
+        { logId: 1, itemId: 1, amount: 100, warehouseId: 1, date: '', userId: 1},
+        { logId: 2, itemId: 2, amount: 100, warehouseId: 1, date: '', userId: 2},
+        { logId: 3, itemId: 3, amount: 100, warehouseId: 1, date: '', userId: 1},
+        { logId: 4, itemId: 2, amount: 100, warehouseId: 1, date: '', userId: 2}
+    ]);
     const [editIndex, setEditIndex] = useState(null);
     const [editLog, setEditLog] = useState({ logId: null, itemId: null, amount: 0, warehouseId: null, date: null, userId: null });
 
@@ -20,13 +25,13 @@ import Table from 'react-bootstrap/Table';
     //     setEditIndex(null);
     // };
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setEditLog((prevLog) => ({
-    //         ...prevLog,
-    //         [name]: value
-    //     }));
-    // }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditLog((prevLog) => ({
+            ...prevLog,
+            [name]: value
+        }));
+    }
 
     // const handleDelete = (index) => {
     //     console.log('delete', index);

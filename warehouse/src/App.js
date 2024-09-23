@@ -17,8 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/warehouses" element={<Warehouse />} />
+         <Route path="/logs" element={<InventoryLog/>} />
       </Routes>
-      {/* <InventoryLog></InventoryLog> */}
       {/* <Items /> */}
       {/* <Login /> */}
 
