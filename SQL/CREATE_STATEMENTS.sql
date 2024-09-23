@@ -67,3 +67,21 @@ CREATE TABLE Logs (
     FOREIGN KEY (ItemID) REFERENCES Items(ItemID) ON DELETE CASCADE,
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE SET NULL  -- becomes NULL if the user is deleted
 );
+
+CREATE PROCEDURE DisplayLogs
+@WarehouseID int
+AS
+(
+SELECT u.username, i.ItemName, Logs.Amount FROM Logs
+LEFT JOIN
+Users u
+ON
+Logs.UserID = u.UserID
+LEFT JOIN
+Items i
+ON
+Logs.ItemID = i.ItemID
+WHERE
+@WarehouseID = Logs.WarehouseID
+)
+GO
