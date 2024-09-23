@@ -37,7 +37,7 @@ public partial class WarehouseInventoryDbContext : DbContext
     {
         modelBuilder.Entity<Item>(entity =>
         {
-            entity.HasKey(e => e.ItemId).HasName("PK__Items__727E83EB4B734230");
+            entity.HasKey(e => e.ItemId).HasName("PK__Items__727E83EB6A81430A");
 
             entity.HasIndex(e => new { e.WarehouseId, e.ItemName }, "Unique_Name").IsUnique();
 
@@ -49,12 +49,12 @@ public partial class WarehouseInventoryDbContext : DbContext
 
             entity.HasOne(d => d.Warehouse).WithMany(p => p.Items)
                 .HasForeignKey(d => d.WarehouseId)
-                .HasConstraintName("FK__Items__Warehouse__367C1819");
+                .HasConstraintName("FK__Items__Warehouse__7B264821");
         });
 
         modelBuilder.Entity<ItemCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__ItemCate__19093A2BC821300B");
+            entity.HasKey(e => e.CategoryId).HasName("PK__ItemCate__19093A2BC62FD783");
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName)
@@ -64,13 +64,12 @@ public partial class WarehouseInventoryDbContext : DbContext
 
             entity.HasOne(d => d.Warehouse).WithMany(p => p.ItemCategories)
                 .HasForeignKey(d => d.WarehouseId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__ItemCateg__Wareh__31B762FC");
+                .HasConstraintName("FK__ItemCateg__Wareh__76619304");
         });
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A8E3BBF918");
+            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A80D481A35");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.ItemId).HasColumnName("ItemID");
@@ -82,17 +81,17 @@ public partial class WarehouseInventoryDbContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK__Logs__ItemID__3F115E1A");
+                .HasConstraintName("FK__Logs__ItemID__03BB8E22");
 
             entity.HasOne(d => d.User).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Logs__UserID__40058253");
+                .HasConstraintName("FK__Logs__UserID__04AFB25B");
         });
 
         modelBuilder.Entity<RItemsItemCategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__R_Items___3214EC2730C99F32");
+            entity.HasKey(e => e.Id).HasName("PK__R_Items___3214EC27EB3F4217");
 
             entity.ToTable("R_Items_ItemCategories");
 
@@ -103,17 +102,17 @@ public partial class WarehouseInventoryDbContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.RItemsItemCategories)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__R_Items_I__Categ__395884C4");
+                .HasConstraintName("FK__R_Items_I__Categ__7E02B4CC");
 
             entity.HasOne(d => d.Item).WithMany(p => p.RItemsItemCategories)
                 .HasForeignKey(d => d.ItemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__R_Items_I__ItemI__3A4CA8FD");
+                .HasConstraintName("FK__R_Items_I__ItemI__7EF6D905");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC6F0205BB");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACD0DF6FC8");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.PasswordHash).HasMaxLength(32);
@@ -125,23 +124,23 @@ public partial class WarehouseInventoryDbContext : DbContext
 
         modelBuilder.Entity<UserPermission>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.WarehouseId }).HasName("PK__UserPerm__95E846515064F34D");
+            entity.HasKey(e => new { e.UserId, e.WarehouseId }).HasName("PK__UserPerm__95E8465112D69508");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.WarehouseId).HasColumnName("WarehouseID");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPermissions)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__UserPermi__UserI__2DE6D218");
+                .HasConstraintName("FK__UserPermi__UserI__72910220");
 
             entity.HasOne(d => d.Warehouse).WithMany(p => p.UserPermissions)
                 .HasForeignKey(d => d.WarehouseId)
-                .HasConstraintName("FK__UserPermi__Wareh__2EDAF651");
+                .HasConstraintName("FK__UserPermi__Wareh__73852659");
         });
 
         modelBuilder.Entity<Warehouse>(entity =>
         {
-            entity.HasKey(e => e.WarehouseId).HasName("PK__Warehous__2608AFD97EE9F998");
+            entity.HasKey(e => e.WarehouseId).HasName("PK__Warehous__2608AFD97032704E");
 
             entity.ToTable("Warehouse");
 
