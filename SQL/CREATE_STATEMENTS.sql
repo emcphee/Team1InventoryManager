@@ -35,8 +35,8 @@ CREATE TABLE UserPermissions (
 
 CREATE TABLE ItemCategories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
-    CategoryName VARCHAR(255),
-    WarehouseID INT,
+    CategoryName VARCHAR(255) NOT NULL,
+    WarehouseID INT NOT NULL,
     FOREIGN KEY (WarehouseID) REFERENCES Warehouse(WarehouseID) ON DELETE CASCADE
 );
 
@@ -60,7 +60,7 @@ CREATE TABLE R_Items_ItemCategories (
 CREATE TABLE Logs (
     LogID INT IDENTITY(1,1) PRIMARY KEY,
     ItemID INT NOT NULL,
-    Amount INT CHECK (Amount <> 0),  -- ensure nonzero value
+    Amount INT CHECK (Amount <> 0) NOT NULL,  -- ensure nonzero value
     WarehouseID INT NOT NULL,
     MovementDate DATETIME DEFAULT GETDATE(),
     UserID INT,  -- user responsible for the movement

@@ -87,6 +87,7 @@ namespace WarehouseInventoryManager.Controllers
 
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.Username),
                 new Claim("UserId", user.UserId.ToString())
             };
 
@@ -113,6 +114,16 @@ namespace WarehouseInventoryManager.Controllers
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok("Logged out");
+        }
+
+        [HttpGet("check")]
+        public IActionResult CheckLogin()
+        {
+            if (CurrentUser != null)
+            {
+                return Ok(new { CurrentUser.Username });
+            }
+            return Unauthorized();
         }
     }
 }

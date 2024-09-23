@@ -1,17 +1,41 @@
 import React, { useState } from 'react';
 import './css/Login.css';
+import { useNavigate } from 'react-router-dom';
 
-function App() {
+function App( {login}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   // FOR LOGGING IN
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    //placeholder
+    try {
+      const response = await fetch('https://localhost:7271/api/UserAccount/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed.');
+      }
+
+      const data = await response.json();
+      setErrorMessage('');
+      login(username);
+
+      navigate('/welcome');
+
+    } catch (error) {
+      setErrorMessage(error.message || 'An error occurred during login');
+    }
   };
 
   // FOR REGISTERING NEW ACCOUNTS
@@ -24,6 +48,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ username, password })
       });
 
@@ -33,6 +58,11 @@ function App() {
       
       const data = await response.json();
       setErrorMessage('');
+
+      login(username);
+
+      navigate('/welcome');
+
     } catch (error) {
       setErrorMessage(error.message || 'An error occurred during registration');
     }

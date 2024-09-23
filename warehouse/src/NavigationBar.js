@@ -7,7 +7,23 @@ import './css/NavigationBar.css';
 import { Link } from 'react-router-dom';
 
 
-function Navigationbar() {
+function Navigationbar( {username, logout, isLoggedIn} ) {
+
+  const handleLogout = () => {
+    try {
+      fetch('https://localhost:7271/api/UserAccount/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      logout();
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -34,7 +50,8 @@ function Navigationbar() {
                   <Nav.Link as= {Link} to="/warehouses">Warehouses</Nav.Link>
                   <Nav.Link as= {Link} to="/logs">Logs</Nav.Link>
                   <NavDropdown title="Account" id="offcanvasNavbarDropdown">
-                    <NavDropdown.Item href="#action5">Log Out</NavDropdown.Item>
+                    <NavDropdown.Item href="#" disabled>{username}</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleLogout} >Log Out</NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
               </Offcanvas.Body>
