@@ -119,10 +119,9 @@ namespace WarehouseInventoryManager.Controllers
         [HttpGet("check")]
         public IActionResult CheckLogin()
         {
-            if (User.Identity.IsAuthenticated)
+            if (CurrentUser != null)
             {
-                var username = User.FindFirst(ClaimTypes.Name)?.Value;
-                return Ok(new { username });
+                return Ok(new { CurrentUser.Username });
             }
             return Unauthorized();
         }
