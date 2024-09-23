@@ -8,6 +8,8 @@ function App() {
 
   return (
     <div>
+      <Login></Login>
+      <Welcome></Welcome>
       <InventoryLog></InventoryLog>
     </div>
   );
