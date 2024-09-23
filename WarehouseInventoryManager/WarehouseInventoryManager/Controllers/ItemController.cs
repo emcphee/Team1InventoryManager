@@ -9,20 +9,19 @@ namespace WarehouseInventoryManager.Controllers
     [ApiController]
     public class ItemController : InventoryManagerBaseController
     {
-        public ItemController(WarehouseInventoryManagementDbContext context) : base(context)
+        public ItemController(WarehouseInventoryDbContext context) : base(context)
         {
         }
 
         [HttpPost]
-        public IActionResult CreateItem([FromBody] ItemCreateDTO model)
+        public IActionResult CreateItem([FromBody] ItemPostDTO model)
         {
-            if (model.ItemName == null || model.Amount == null || model.WarehouseId == null) return BadRequest();
-            if (!UserHasPermission((int)model.WarehouseId, Permissionlevel.Editor)) return Unauthorized();
+            if (!UserHasPermission(model.WarehouseId, Permissionlevel.Editor)) return Unauthorized("You don't have permission to edit this database");
 
             try
             {
                 if (_context.Items.FirstOrDefault(item => model.WarehouseId == item.WarehouseId && model.ItemName == item.ItemName) != null) return BadRequest("Item already exists with that name");
-                var item = new Item((int)model.WarehouseId, (int)model.Amount, model.ItemName);
+                var item = new Item(model.WarehouseId, model.Amount, model.ItemName);
                 _context.Items.Add(item);
                 _context.SaveChanges();
             }
@@ -39,7 +38,7 @@ namespace WarehouseInventoryManager.Controllers
             if (CurrentUser == null) return Unauthorized();
             var item = _context.Items.Find(id);
             if (item == null) return NotFound(); 
-            if (!UserHasPermission((int)item.WarehouseId, Permissionlevel.Admin)) return Unauthorized();
+            if (!UserHasPermission(item.WarehouseId, Permissionlevel.Admin)) return Unauthorized();
 
             try
             {
@@ -55,22 +54,20 @@ namespace WarehouseInventoryManager.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PatchItem(int id, [FromBody] ItemCreateDTO model)
+        public IActionResult PatchItem(int id, [FromBody] ItemPatchDTO model)
         {
             if (CurrentUser == null) return Unauthorized();
 
-            var item = _context.Items.Find(id);
+            Item? item = _context.Items.Find(id);
             if (item == null) return NotFound();
-            if (!UserHasPermission((int)item.WarehouseId, Permissionlevel.Admin)) return Unauthorized();
+            if (!UserHasPermission(item.WarehouseId, Permissionlevel.Editor)) return Unauthorized();
+            if (model.isEmpty()) return BadRequest("No properties to PATCH provided");
 
-            var warehouse = _context.Warehouses.Find(id);
-            if (warehouse == null) return NotFound();
             try
             {
-                //if (model.Name != null) warehouse.Name = model.Name;
-                //if (model.Address != null) warehouse.Address = model.Address;
-                //_context.Warehouses.Update(warehouse);
-                //_context.SaveChanges();
+                if (model.ItemName != null) item.ItemName = model.ItemName;
+                _context.Items.Update(item);
+                _context.SaveChanges();
             }
             catch
             {
@@ -78,5 +75,20 @@ namespace WarehouseInventoryManager.Controllers
             }
             return Ok();
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetItem(int id)
+        {
+
+            if (CurrentUser == null) return Unauthorized();
+
+            Item? item = _context.Items.Find(id);
+            if (item == null) return NotFound();
+            if (!UserHasPermission(item.WarehouseId, Permissionlevel.Viewer)) return Unauthorized();
+
+            return Ok(new ItemGetDTO(item));
+        }
+
+
     }
 }

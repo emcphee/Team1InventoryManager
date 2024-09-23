@@ -10,8 +10,8 @@ namespace WarehouseInventoryManager.Controllers
     public abstract class InventoryManagerBaseController : ControllerBase
     {
 
-        protected readonly WarehouseInventoryManagementDbContext _context;
-        public InventoryManagerBaseController(WarehouseInventoryManagementDbContext context)
+        protected readonly WarehouseInventoryDbContext _context;
+        public InventoryManagerBaseController(WarehouseInventoryDbContext context)
         {
             _context = context;
         }

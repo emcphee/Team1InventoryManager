@@ -16,7 +16,7 @@ namespace WarehouseInventoryManager.Controllers
     [ApiController]
     public class UserAccountController : InventoryManagerBaseController 
     {
-        public UserAccountController(WarehouseInventoryManagementDbContext context) : base(context)
+        public UserAccountController(WarehouseInventoryDbContext context) : base(context)
         {
         }
 

@@ -9,12 +9,12 @@ namespace WarehouseInventoryManager.Controllers
     [ApiController]
     public class WarehouseController : InventoryManagerBaseController 
     {
-        public WarehouseController(WarehouseInventoryManagementDbContext context) : base(context)
+        public WarehouseController(WarehouseInventoryDbContext context) : base(context)
         {
         }
 
         [HttpPost()]
-        public IActionResult CreateWarehouse([FromBody] WarehouseCreateDTO model)
+        public IActionResult CreateWarehouse([FromBody] WarehousePostDTO model)
         {
             if (CurrentUser == null) return Unauthorized();
             if (model.Name == null || model.Address == null) return BadRequest();
@@ -48,8 +48,18 @@ namespace WarehouseInventoryManager.Controllers
             if (!UserHasPermission(id, Permissionlevel.Viewer)) return Unauthorized();
 
             // create object which contains warehouse info + all items and return here
+            Warehouse? warehouse = _context.Warehouses.Find(id);
+            if(warehouse == null) return NotFound("Warehouse doesn't exist.");
 
-            return Ok();
+            // add permission level here if frontend wants it
+            UserPermission? permission = _context.UserPermissions.Where(perm => perm.UserId == CurrentUser.UserId && perm.WarehouseId == id).FirstOrDefault();
+            if (permission == null) return StatusCode(500, "Somehow your access to the database was removed between lines");
+
+            
+            List<Item> items = _context.Items.Where(item => item.WarehouseId == id).ToList();
+            var result = new WarehouseGetWithItemsDTO(items, warehouse, permission);
+
+            return Ok(result);
         }
         
         // allows an Admin of a warehouse to DELETE a warehouse
@@ -75,7 +85,7 @@ namespace WarehouseInventoryManager.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PatchWarehouse(int id, [FromBody] WarehouseCreateDTO model)
+        public IActionResult PatchWarehouse(int id, [FromBody] WarehousePatchDTO model)
         {
             if (CurrentUser == null) return Unauthorized();
             if (_context.Warehouses.Find(id) == null) return NotFound();
@@ -83,6 +93,7 @@ namespace WarehouseInventoryManager.Controllers
 
             var warehouse = _context.Warehouses.Find(id);
             if (warehouse == null) return NotFound();
+            if (model.isEmpty()) return BadRequest("No properties to PATCH provided");
             try
             {
                 if (model.Name != null) warehouse.Name = model.Name;
@@ -107,14 +118,14 @@ namespace WarehouseInventoryManager.Controllers
                         join permission in _context.UserPermissions
                         on warehouse.WarehouseId equals permission.WarehouseId
                         where permission.UserId == 1
-                        select new WarehouseDTO
+                        select new WarehouseGetDTO
                         {
                             WarehouseId = warehouse.WarehouseId,
                             Name = warehouse.Name,
                             Address = warehouse.Address,
                             PermissionLevel = permission.Permission
                         };
-            List<WarehouseDTO> list = query.ToList();
+            List<WarehouseGetDTO> list = query.ToList();
             var result = new WarehouseListDTO(list);
 
             return Ok(result);

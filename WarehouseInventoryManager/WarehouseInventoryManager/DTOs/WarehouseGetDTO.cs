@@ -1,6 +1,6 @@
 ﻿namespace WarehouseInventoryManager.DTOs
 {
-    public class WarehouseDTO 
+    public class WarehouseGetDTO 
     {
         public required int WarehouseId { get; set; }
         public required string Name { get; set; }

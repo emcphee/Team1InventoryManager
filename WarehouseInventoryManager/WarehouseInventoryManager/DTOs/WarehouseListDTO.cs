@@ -3,10 +3,10 @@
     public class WarehouseListDTO
     {
         public WarehouseListDTO() { }
-        public WarehouseListDTO(List<WarehouseDTO> list)
+        public WarehouseListDTO(List<WarehouseGetDTO> list)
         {
             WarehouseList = list;
         }
-        public List<WarehouseDTO> WarehouseList { get; set; }
+        public List<WarehouseGetDTO> WarehouseList { get; set; }
     }
 }

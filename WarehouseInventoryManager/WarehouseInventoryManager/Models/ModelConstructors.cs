@@ -30,11 +30,11 @@
 
     public partial class Item
     {
-        public Item(int warehouseId, int amount, string name)
+        public Item(int warehouseId, int amount, string ItemName)
         {
             this.WarehouseId = warehouseId;
             this.Amount = amount;
-            this.ItemName = name;
+            this.ItemName = ItemName;
         }
     } 
 }
