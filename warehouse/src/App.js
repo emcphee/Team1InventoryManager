@@ -6,6 +6,7 @@ import InventoryLog from './InventoryLog';
 import Navigationbar from './NavigationBar';
 import Warehouse from './Warehouse';
 import Items from './Items';
+import Categories from './Categories';
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -76,9 +77,21 @@ function App() {
             <InventoryLog />
           </PrivateRoute>
         }/>
+
+        <Route path="/warehouses/:warehouseId/categories" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Categories />
+          </PrivateRoute>
+        }/>
+
+        <Route path="/warehouses/categories/:categoryId/" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Items />
+          </PrivateRoute>
+        }/>
+        
         
       </Routes>
-      {/* <Items /> */}
     </Router>
   );
 }
