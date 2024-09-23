@@ -36,7 +36,7 @@
   box-sizing: border-box;
 }
 
-button {
+.login-button {
   width: 100%;
   padding: 10px;
   border: none;
@@ -47,6 +47,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.login-button:hover {
   background-color: #4e59cc;
 }

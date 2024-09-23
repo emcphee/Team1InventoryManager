@@ -9,7 +9,7 @@ public partial class UserPermission
 
     public int WarehouseId { get; set; }
 
-    public int? Permission { get; set; }
+    public int Permission { get; set; }
 
     public virtual User User { get; set; } = null!;
 

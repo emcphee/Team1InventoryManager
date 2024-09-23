@@ -61,7 +61,7 @@ function App() {
               required
             />
           </div>
-          <button type="submit">{isLogin ? 'Login' : 'Register'}</button> {/* Show Login or Register button */}
+          <button type="submit"className='login-button'>{isLogin ? 'Login' : 'Register'}</button> {/* Show Login or Register button */}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
         </form>
         <p>

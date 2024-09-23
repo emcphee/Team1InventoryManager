@@ -3,28 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using WarehouseInventoryManager.DTOs;
 using WarehouseInventoryManager.Models;
 using WarehouseInventoryManager.Utils;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace WarehouseInventoryManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserAccountController : ControllerBase
+    public class UserAccountController : InventoryManagerBaseController 
     {
-        private readonly WarehouseInventoryManagementDbContext _context;
-        public UserAccountController(WarehouseInventoryManagementDbContext context)
+        public UserAccountController(WarehouseInventoryDbContext context) : base(context)
         {
-            _context = context;
         }
 
-
-
         [HttpPost("register")]
-        public IActionResult Register([FromBody] LoginModel model)
+        public async Task<IActionResult> RegisterAsync([FromBody] LoginDTO model)
         {
-            // reject if username already exists
+            User newUser;
+                // reject if username already exists
             if (_context.Users.FirstOrDefault(u => u.Username == model.Username) != null)
             {
                 return BadRequest("User already exists");
@@ -37,7 +37,7 @@ namespace WarehouseInventoryManager.Controllers
                 var (salt, hash) = CryptoUtils.HashPassword(model.Password);
 
                 // store (username, pass, hash) in db
-                User newUser = new User(model.Username, hash, salt);
+                newUser = new User(model.Username, hash, salt);
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
             }
@@ -47,12 +47,31 @@ namespace WarehouseInventoryManager.Controllers
                 return BadRequest("Error in processing registration parameters");
             }
 
+            var claims = new List<Claim>
+            {
+                new Claim("UserId", newUser.UserId.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true, // Persist the cookie across sessions
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
             // user has been successfully added to db
-            return Ok(new { username = model.Username, authToken = "abc" });
+            return Ok(new { username = model.Username });
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel model)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO model)
         {
             User? user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
 
@@ -66,7 +85,34 @@ namespace WarehouseInventoryManager.Controllers
                 return BadRequest("Incorrect Password");
             }
 
-            return Ok(new { username = model.Username, authToken = "abc" });
+            var claims = new List<Claim>
+            {
+                new Claim("UserId", user.UserId.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true, // Persist the cookie across sessions
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+            return Ok(new { username = model.Username });
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok("Logged out");
         }
     }
 }
