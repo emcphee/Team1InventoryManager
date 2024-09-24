@@ -57,20 +57,40 @@ function Items() {
     const filteredItems = selectedCategories.length > 0
         ? itemsList.filter(item => item.categories.some(category => selectedCategories.includes(category)))
         : itemsList;
-    
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+
     const handleEdit = (index) => {
         setEditingIndex(index);
         setEditingItem(itemsList[index]);
+        setSelectedCategories(itemsList[index].categories); // Set selected categories for editing
     }
 
-    const handleConfirm = (index) => {
+    const handleConfirm = async (index) => {
         const updatedItems = [...itemsList];
         updatedItems[index] = editingItem;
         setItemsList(updatedItems);
         setEditingIndex(null);
+
+        // Update categories in the API
+        await updateCategories(editingItem.itemId, selectedCategories, itemsList[index].categories);
+    };
+
+    const updateCategories = async (itemId, newCategories, oldCategories) => {
+        const categoriesToAdd = newCategories.filter(category => !oldCategories.includes(category));
+        const categoriesToRemove = oldCategories.filter(category => !newCategories.includes(category));
+
+        // Apply new categories
+        for (const category of categoriesToAdd) {
+            await fetch(`https://localhost:7271/api/Item/applyCategory/${itemId}/${category}`, { 
+                method: 'POST',
+                credentials: 'include'});
+        }
+
+        // Remove old categories
+        for (const category of categoriesToRemove) {
+            await fetch(`https://localhost:7271/api/Item/unapplyCategory/${itemId}/${category}`, {
+                method: 'DELETE',
+                credentials: 'include' });
+        }
     };
 
     const handleChange = (e) => {
@@ -80,6 +100,10 @@ function Items() {
             [name]: value
         }));
     }
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
 
     const handleDelete = (index) => {
         console.log('delete', index);
@@ -134,14 +158,26 @@ function Items() {
                                 <td>
                                 <select
                                             name="categories"
-                                            value={editingItem.categories || ''}
-                                            onChange={handleChange}
+                                            multiple
+                                            value={editingItem.categories}
+                                            onChange={(e) => {
+                                                const options = e.target.options;
+                                                const selected = [];
+                                                for (let i = 0; i < options.length; i++) {
+                                                    if (options[i].selected) {
+                                                        selected.push(options[i].value);
+                                                    }
+                                                }
+                                                setEditingItem((prevItem) => ({
+                                                    ...prevItem,
+                                                    categories: selected
+                                                }));
+                                            }}
                                         >
-                                            <option value="">Select a category</option>
                                             {uniqueCategories.map((category, idx) => (
                                                 <option key={idx} value={category}>{category}</option>
                                             ))}
-                                        </select>
+                                    </select>
                                 </td>
                                 <td>
                                     <button onClick={() => handleConfirm(index)}>Confirm</button>
@@ -153,7 +189,7 @@ function Items() {
                                 <td>{item.itemId}</td>
                                 <td>{item.itemName}</td>
                                 <td>{item.amount}</td>
-                                <td>{item.categories.length === 0 ? "No category" : item.categories.join(", ")}</td>
+                                <td>{item.categories.length === 0 ? "No category" : item.categories}</td>
                                 {userType === 'admin' && (
                                     <td>
                                         <button onClick={() => handleEdit(index)}>Edit</button>
