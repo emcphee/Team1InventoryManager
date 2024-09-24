@@ -147,13 +147,13 @@ function Items() {
                         {editingIndex === index ? (
                             <>
                                 <td>
-                                    <input type="text" name="itemId" value={editingItem.itemId} onChange={handleChange} />
+                                    {item.itemId}
                                 </td>
                                 <td>
-                                    <input type="text" name="itemName" value={editingItem.itemName} onChange={handleChange} />
+                                    {item.itemName}
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" value={editingItem.amount} onChange={handleChange} />
+                                    {item.amount}
                                 </td>
                                 <td>
                                 <select
