@@ -56,16 +56,16 @@ import ListGroup from 'react-bootstrap/ListGroup';
                         {editIndex === index ? (
                             <>
                                 <td>
-                                    <input type="text" name="logid" value={editLog.username} onChange={handleChange} />
+                                    <input type="text" name="username" value={editLog.username} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="itemid" value={editLog.itemName} onChange={handleChange} />
+                                    <input type="text" name="itemName" value={editLog.itemName} onChange={handleChange} />
                                 </td>
                                 <td>
                                     <input type="number" name="amount" value={editLog.amount} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="warehouseid" value={editLog.movementDate} onChange={handleChange} />
+                                    <input type="text" name="movementDate" value={editLog.movementDate} onChange={handleChange} />
                                 </td>
                             </>
                         ) : (
@@ -73,7 +73,15 @@ import ListGroup from 'react-bootstrap/ListGroup';
                                 <td>{log.username}</td>
                                 <td>{log.itemName}</td>
                                 <td>{log.amount}</td>
-                                <td>{log.movementDate}</td>
+                                <td>{new Date(log.movementDate).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })} at {new Date(log.movementDate).toLocaleTimeString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit'
+                                })}</td>
                             </>
                         )}
                     </tr>
