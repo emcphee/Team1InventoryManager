@@ -1,8 +1,9 @@
 .welcome {
-    background-image: url('background.jpg');
-    background-size: 100% 100vh;
+    background-image: url('background.png');
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: #e4c499;
     height: 100vh;
     display: flex;
     justify-content: center;
