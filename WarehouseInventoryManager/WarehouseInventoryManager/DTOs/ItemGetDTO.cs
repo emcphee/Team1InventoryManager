@@ -8,11 +8,14 @@ namespace WarehouseInventoryManager.DTOs
         public string ItemName { get; set; }
 
         public int Amount { get; set; }
-        public ItemGetDTO(Item item)
+        public List<string> Categories { get; set; }
+        public ItemGetDTO(Item item, List<string> categories)
         {
+
             ItemId = item.ItemId;
             ItemName = item.ItemName;
             Amount = item.Amount;
+            Categories = categories;
         }
     }
 }

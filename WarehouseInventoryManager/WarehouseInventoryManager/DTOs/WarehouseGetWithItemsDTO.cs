@@ -11,7 +11,7 @@ namespace WarehouseInventoryManager.DTOs
 
         public List<ItemGetDTO> Items { get; set; }
 
-        public WarehouseGetWithItemsDTO(List<Item> items, Warehouse warehouse, UserPermission permission)
+        public WarehouseGetWithItemsDTO(List<Item> items, Warehouse warehouse, UserPermission permission, WarehouseInventoryDbContext dbContext)
         {
             this.WarehouseId = warehouse.WarehouseId;
             this.Name = warehouse.Name;
@@ -21,7 +21,7 @@ namespace WarehouseInventoryManager.DTOs
             Items = new List<ItemGetDTO>();
             foreach (var item in items)
             {
-                Items.Add(new ItemGetDTO(item));
+                Items.Add(new ItemGetDTO(item, DBUtils.GetCategories(dbContext, item)));
             }
         }
 

@@ -57,7 +57,7 @@ namespace WarehouseInventoryManager.Controllers
 
             
             List<Item> items = _context.Items.Where(item => item.WarehouseId == id).ToList();
-            var result = new WarehouseGetWithItemsDTO(items, warehouse, permission);
+            var result = new WarehouseGetWithItemsDTO(items, warehouse, permission, _context);
 
             return Ok(result);
         }
