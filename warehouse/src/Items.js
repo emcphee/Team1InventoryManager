@@ -1,27 +1,66 @@
 import Table from 'react-bootstrap/Table';
 import './css/Items.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 function Items() {
 
     const userType = 'admin';
-
-    const [itemsList, setItemsList] = useState([
-        { id: 1, name: 'Item 1', amount: 100, category: 'Category 1' },
-        { id: 2, name: 'Item 2', amount: 200, category: 'Category 2' },
-        { id: 3, name: 'Item 3', amount: 300, category: 'Category 3' },
-        { id: 4, name: 'Item 4', amount: 400, category: 'Category 4' },
-        { id: 5, name: 'Item 5', amount: 500, category: 'Category 2' },
-        { id: 6, name: 'Item 6', amount: 600, category: 'Category 1' },
-        { id: 7, name: 'Item 7', amount: 800, category: 'Category 3' },
-        { id: 8, name: 'Item 8', amount: 800, category: 'Category 2' },
-        { id: 9, name: 'Item 9', amount: 900, category: 'Category 1' },
-        { id: 10, name: 'Item 10', amount: 1000, category: 'Category 4' },
-    ]);
-    
+    const { warehouseId } = useParams();
+    const [itemsList, setItemsList] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [editingItem, setEditingItem] = useState({ id: null, name: '', amount: 0, category: '' });
+    const [editingItem, setEditingItem] = useState({ itemId: null, itemName: '', amount: 0, categories: '' });
+    const [uniqueCategories, setUniqueCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setItemsList(data.items);
+                    extractUniqueCategories(data.items);
+                } else {
+                    throw response;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchItems();
+    }, [warehouseId]);
+
+    const extractUniqueCategories = (items) => {
+        const categories = new Set(); //store unique categories
+        items.forEach(item => {
+            item.categories.forEach(category => {
+                categories.add(category);
+            });
+        });
+        setUniqueCategories(Array.from(categories)); // Convert Set back to Array
+    };
+
+    const handleCategoryChange = (category) => {
+        setSelectedCategories((prev) => 
+            prev.includes(category) 
+                ? prev.filter(c => c !== category) 
+                : [...prev, category]
+        );
+    };
+
+    const filteredItems = selectedCategories.length > 0
+        ? itemsList.filter(item => item.categories.some(category => selectedCategories.includes(category)))
+        : itemsList;
+    
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
     const handleEdit = (index) => {
         setEditingIndex(index);
         setEditingItem(itemsList[index]);
@@ -47,32 +86,62 @@ function Items() {
     }
 
     return (
+        <>
+        <div className="dropdown">
+                <button onClick={toggleDropdown}>
+                    {selectedCategories.length > 0 ? selectedCategories.join(", ") : "Select Categories"}
+                </button>
+                {dropdownOpen && (
+                    <div className="dropdown-content">
+                        {uniqueCategories.map((category, idx) => (
+                            <label key={idx}>
+                                <input
+                                    type="checkbox"
+                                    value={category}
+                                    checked={selectedCategories.includes(category)}
+                                    onChange={() => handleCategoryChange(category)}
+                                /> 
+                                {category}
+                            </label>
+                        ))}
+                    </div>
+                )}
+            </div>
         <Table bordered hover responsive className='fixed-table'>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Name</th>
+              <th>Item ID</th>
+              <th>Item Name</th>
               <th>Amount</th>
               <th>Category</th>
               {userType === 'admin' && <th>Actions</th>}
             </tr>
             </thead>
             <tbody>
-                {itemsList.map((item, index) => (
+            {filteredItems.map((item, index) => (
                     <tr key={index}>
                         {editingIndex === index ? (
                             <>
                                 <td>
-                                    <input type="text" name="id" value={editingItem.id} onChange={handleChange} />
+                                    <input type="text" name="itemId" value={editingItem.itemId} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="name" value={editingItem.name} onChange={handleChange} />
+                                    <input type="text" name="itemName" value={editingItem.itemName} onChange={handleChange} />
                                 </td>
                                 <td>
                                     <input type="number" name="amount" value={editingItem.amount} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="category" value={editingItem.category} onChange={handleChange} />
+                                <select
+                                            name="categories"
+                                            value={editingItem.categories || ''}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="">Select a category</option>
+                                            {uniqueCategories.map((category, idx) => (
+                                                <option key={idx} value={category}>{category}</option>
+                                            ))}
+                                        </select>
                                 </td>
                                 <td>
                                     <button onClick={() => handleConfirm(index)}>Confirm</button>
@@ -81,10 +150,10 @@ function Items() {
                             </>
                         ) : (
                             <>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
+                                <td>{item.itemId}</td>
+                                <td>{item.itemName}</td>
                                 <td>{item.amount}</td>
-                                <td>{item.category}</td>
+                                <td>{item.categories.length === 0 ? "No category" : item.categories.join(", ")}</td>
                                 {userType === 'admin' && (
                                     <td>
                                         <button onClick={() => handleEdit(index)}>Edit</button>
@@ -97,6 +166,7 @@ function Items() {
                 ))}
           </tbody>
         </Table>
+        </>
     );
 }
 

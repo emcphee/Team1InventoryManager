@@ -17,6 +17,7 @@
   border-radius: 10px;
   width: 300px;
   text-align: center;
+  border: 10px solid #e4c499;
 }
 
 .input {

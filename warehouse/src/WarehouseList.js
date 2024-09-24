@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useNavigate } from 'react-router-dom';
 
+
 function WarehouseList() {
 
     const [warehouseList, setWarehouseList] = useState([]);
@@ -9,7 +10,7 @@ function WarehouseList() {
     const navigate = useNavigate();
 
     const handleItemClick = (warehouseId) => {
-        navigate(`/warehouses/${warehouseId}/categories`);
+        navigate(`/warehouses/items/${warehouseId}`);
     }
 
     const handleLogsClick = (warehouseId) => {
@@ -42,10 +43,12 @@ function WarehouseList() {
             <ListGroup variant='flush'>
                 {warehouseList.map((warehouse, index) => (
                     <ListGroup.Item key={index}>
-                        <div><strong>{warehouse.name}</strong></div>
-                        <div>{warehouse.address}</div>
+                        <div>
+                        <strong>{warehouse.name}</strong><br/>
+                        {warehouse.address}<br/>
                         <button onClick={() => handleItemClick(index+1)}>Items</button>
                         <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
+                        </div>
                     </ListGroup.Item>
                 ))}
             </ListGroup>

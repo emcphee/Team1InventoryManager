@@ -78,6 +78,12 @@ function App() {
           </PrivateRoute>
         }/>
 
+        <Route path="/warehouses/items/:warehouseId/" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Items />
+          </PrivateRoute>
+        }/>
+
         <Route path="/warehouses/:warehouseId/categories" element={
           <PrivateRoute isLoggedIn={isLoggedIn}>
             <Categories />

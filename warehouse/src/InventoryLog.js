@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './css/InvLog.css';
 import Table from 'react-bootstrap/Table';
-import ListGroup from 'react-bootstrap/ListGroup';
 
  function InventoryLog() {
     
