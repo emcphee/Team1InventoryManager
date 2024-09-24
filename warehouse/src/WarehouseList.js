@@ -1,36 +1,37 @@
+import { useState, useEffect } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useNavigate } from 'react-router-dom';
 
 function WarehouseList() {
+
+    const [warehouseList, setWarehouseList] = useState([]);
 
     const navigate = useNavigate();
 
     const handleItemClick = (warehouseId) => {
         navigate(`/warehouses/${warehouseId}/categories`);
     }
+    
+    useEffect(() => {
+        const fetchWarehouses = async () => {
+            try {
+                const response = await fetch('https://localhost:7271/api/Warehouse/list', {
+                    method: 'GET',
+                    credentials: 'include'
+                })
 
-    const warehouseList = [
-        {
-            name: 'Warehouse 1',
-            address: '123 Warehouse Lane',
-        },
-        {
-            name: 'Warehouse 2',
-            address: '456 Warehouse Lane',
-        },
-        {
-            name: 'Warehouse 3',
-            address: '789 Warehouse Lane',
-        },
-        {
-            name: 'Warehouse 4',
-            address: '101112 Warehouse Lane',
-        },
-        {
-            name: 'Warehouse 5',
-            address: '131415 Warehouse Lane',
+                if (response.ok) {
+                    const data = await response.json();
+                    setWarehouseList(data.warehouseList);
+                } else {
+                    throw response;
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-    ];
+        fetchWarehouses();
+    }, []);
 
     return (
         <>
