@@ -11,6 +11,10 @@ function WarehouseList() {
     const handleItemClick = (warehouseId) => {
         navigate(`/warehouses/${warehouseId}/categories`);
     }
+
+    const handleLogsClick = (warehouseId) => {
+        navigate(`/warehouses/logs/${warehouseId}`);
+    };
     
     useEffect(() => {
         const fetchWarehouses = async () => {
@@ -37,9 +41,11 @@ function WarehouseList() {
         <>
             <ListGroup variant='flush'>
                 {warehouseList.map((warehouse, index) => (
-                    <ListGroup.Item key={index} action onClick={() => handleItemClick(index+1)}>
+                    <ListGroup.Item key={index}>
                         <div><strong>{warehouse.name}</strong></div>
                         <div>{warehouse.address}</div>
+                        <button onClick={() => handleItemClick(index+1)}>Items</button>
+                        <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
                     </ListGroup.Item>
                 ))}
             </ListGroup>

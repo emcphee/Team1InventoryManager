@@ -1,34 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import './css/InvLog.css';
 import Table from 'react-bootstrap/Table';
+import ListGroup from 'react-bootstrap/ListGroup';
 
  function InventoryLog() {
     
+    const { warehouseId } = useParams();
     const [logList, setLogList] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
-    const [editLog, setEditLog] = useState({ username: "", itemName: "", amount: 0, date: null});
-
-    const fetchLogs = async () => {
-        try {
-            const response = await fetch('https://localhost:7271/api/Logs/', {
-                method: 'GET',
-                credentials: 'include'
-            })
-
-            if (response.ok) {
-                const data = await response.json();
-                setLogList(data.logList);
-            } else {
-                throw response;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [editLog, setEditLog] = useState({ username: '', itemName: '', amount: 0, movementDate: null});
 
     useEffect(() => {
+        const fetchLogs = async () => {
+            try {
+                const response = await fetch(`https://localhost:7271/api/Logs/${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setLogList(data);
+                } else {
+                    throw response;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
         fetchLogs();
-    }, []);
+    }, [warehouseId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -63,7 +65,7 @@ import Table from 'react-bootstrap/Table';
                                     <input type="number" name="amount" value={editLog.amount} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="warehouseid" value={editLog.date} onChange={handleChange} />
+                                    <input type="text" name="warehouseid" value={editLog.movementDate} onChange={handleChange} />
                                 </td>
                             </>
                         ) : (
@@ -71,7 +73,7 @@ import Table from 'react-bootstrap/Table';
                                 <td>{log.username}</td>
                                 <td>{log.itemName}</td>
                                 <td>{log.amount}</td>
-                                <td>{log.date}</td>
+                                <td>{log.movementDate}</td>
                             </>
                         )}
                     </tr>

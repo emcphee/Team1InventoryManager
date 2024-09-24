@@ -48,7 +48,6 @@ function Navigationbar( {username, logout, isLoggedIn} ) {
                   <Nav.Link as= {Link} to="/">Home</Nav.Link>
                   <Nav.Link href="#action2">Inventory</Nav.Link>
                   <Nav.Link as= {Link} to="/warehouses">Warehouses</Nav.Link>
-                  <Nav.Link as= {Link} to="/logs">Logs</Nav.Link>
                   <NavDropdown title="Account" id="offcanvasNavbarDropdown">
                     <NavDropdown.Item href="#" disabled>{username}</NavDropdown.Item>
                     <NavDropdown.Item onClick={handleLogout} >Log Out</NavDropdown.Item>
