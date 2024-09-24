@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/InvLog.css';
 import Table from 'react-bootstrap/Table';
 
  function InventoryLog() {
     
-    const [logList, setLogList] = useState([
-        { logId: 1, itemId: 1, amount: 100, warehouseId: 1, date: '', userId: 1},
-        { logId: 2, itemId: 2, amount: 100, warehouseId: 1, date: '', userId: 2},
-        { logId: 3, itemId: 3, amount: 100, warehouseId: 1, date: '', userId: 1},
-        { logId: 4, itemId: 2, amount: 100, warehouseId: 1, date: '', userId: 2}
-    ]);
+    const [logList, setLogList] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
-    const [editLog, setEditLog] = useState({ logId: null, itemId: null, amount: 0, warehouseId: null, date: null, userId: null });
+    const [editLog, setEditLog] = useState({ username: "", itemName: "", amount: 0, date: null});
 
-    // const handleEdit = (index) => {
-    //     setEditIndex(index);
-    //     setEditItem(logList[index]);
-    // }
+    const fetchLogs = async () => {
+        try {
+            const response = await fetch('https://localhost:7271/api/Logs/', {
+                method: 'GET',
+                credentials: 'include'
+            })
 
-    // const handleConfirm = (index) => {
-    //     const updatedLogs = [...logList];
-    //     updatedLogs[index] = editLog;
-    //     setLogList(updatedItems);
-    //     setEditIndex(null);
-    // };
+            if (response.ok) {
+                const data = await response.json();
+                setLogList(data.logList);
+            } else {
+                throw response;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchLogs();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,21 +38,14 @@ import Table from 'react-bootstrap/Table';
         }));
     }
 
-    // const handleDelete = (index) => {
-    //     console.log('delete', index);
-    // }
-
-
     return (
         <Table bordered hover responsive className='fixed-table'>
             <thead>
             <tr>
-              <th>Log ID</th>
-              <th>Item ID</th>
+              <th>Username</th>
+              <th>Item Name</th>
               <th>Amount</th>
-              <th>Warehouse ID</th>
               <th>Movement Date</th>
-              <th>User ID</th>
             </tr>
             </thead>
             <tbody>
@@ -56,38 +54,24 @@ import Table from 'react-bootstrap/Table';
                         {editIndex === index ? (
                             <>
                                 <td>
-                                    <input type="text" name="logid" value={editLog.logId} onChange={handleChange} />
+                                    <input type="text" name="logid" value={editLog.username} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="itemid" value={editLog.itemId} onChange={handleChange} />
+                                    <input type="text" name="itemid" value={editLog.itemName} onChange={handleChange} />
                                 </td>
                                 <td>
                                     <input type="number" name="amount" value={editLog.amount} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="text" name="warehouseid" value={editLog.warehouseId} onChange={handleChange} />
+                                    <input type="text" name="warehouseid" value={editLog.date} onChange={handleChange} />
                                 </td>
-                                <td>
-                                    <input type="text" name="userid" value={editLog.userId} onChange={handleChange} />
-                                </td>
-                                {/* <td>
-                                    <button onClick={() => handleConfirm(index)}>Confirm</button>
-                                    <button onClick={() => setEditingIndex(null)}>Cancel</button>
-                                </td> */}
                             </>
                         ) : (
                             <>
-                                <td>{log.logId}</td>
-                                <td>{log.itemId}</td>
+                                <td>{log.username}</td>
+                                <td>{log.itemName}</td>
                                 <td>{log.amount}</td>
-                                <td>{log.warehouseId}</td>
-                                <td>{log.userId}</td>
-                                {/* {userType === 'admin' && (
-                                    <td>
-                                        <button onClick={() => handleEdit(index)}>Edit</button>
-                                        <button onClick={() => handleDelete(index)}>Delete</button>
-                                    </td>
-                                )} */}
+                                <td>{log.date}</td>
                             </>
                         )}
                     </tr>

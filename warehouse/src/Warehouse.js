@@ -1,11 +1,10 @@
 import WarehouseList from "./WarehouseList";
-import WarehouseHeading from "./WarehouseHeading";
 import './css/Warehouse.css';
 
 function Warehouse() {
     return (
         <div>
-            <WarehouseHeading />
+            <h1 className="warehouse-h1">List of Warehouses</h1>
             <WarehouseList />
         </div>
     );
