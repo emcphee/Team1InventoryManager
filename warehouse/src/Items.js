@@ -189,7 +189,7 @@ function Items() {
                                 <td>{item.itemId}</td>
                                 <td>{item.itemName}</td>
                                 <td>{item.amount}</td>
-                                <td>{item.categories.length === 0 ? "No category" : item.categories}</td>
+                                <td>{item.categories.length === 0 ? "No category" : item.categories.join(", ")}</td>
                                 {userType === 'admin' && (
                                     <td>
                                         <button onClick={() => handleEdit(index)}>Edit</button>
