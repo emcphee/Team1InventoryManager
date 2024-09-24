@@ -1,3 +1,8 @@
 .warehouse-h1 {
     text-align: center;
 }
+
+.warehouse-list-group {
+    display: flex !important;
+    justify-content: space-between;
+  }
