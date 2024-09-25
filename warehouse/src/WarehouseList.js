@@ -127,9 +127,9 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                                     <div>{warehouse.address}</div>
                                 </div>
                             )}
-                            <button onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
-                            <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
-                            <button onClick={() => handleUsersClick(warehouse.warehouseId)}>Users</button>
+                            <button className = "items" onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
+                            <button className = "items" onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
+                            <button className = "items" onClick={() => handleUsersClick(warehouse.warehouseId)}>Users</button>
                         </div>
                         <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
                     </ListGroup.Item>
