@@ -51,8 +51,8 @@ function Users() {
 
     return (
         <>
-        <button className="users" onClick={() => handleItemClick(warehouseId)}>Items</button>
-        <button className="users" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
+        <button className="items" onClick={() => handleItemClick(warehouseId)}>Items</button>
+        <button className="items" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
         <Table bordered hover responsive className='fixed-table'>
             <thead>
             <tr>

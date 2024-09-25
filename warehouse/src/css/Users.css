@@ -11,14 +11,14 @@
     vertical-align: middle;
 }
 
-.users {
+.items {
     background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-}
-
-.users:hover {
+  }
+  
+  .items:hover {
     background-color: #0056b3;
-}
+  }

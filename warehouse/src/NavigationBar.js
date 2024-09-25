@@ -46,7 +46,7 @@ function Navigationbar( {username, logout, isLoggedIn} ) {
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <Nav.Link as= {Link} to="/">Home</Nav.Link>
-                  <Nav.Link href="#action2">Inventory</Nav.Link>
+                  {/* <Nav.Link href="#action2">Inventory</Nav.Link> */}
                   <Nav.Link as= {Link} to="/warehouses">Warehouses</Nav.Link>
                   <NavDropdown title="Account" id="offcanvasNavbarDropdown">
                     <NavDropdown.Item href="#" disabled>{username}</NavDropdown.Item>
