@@ -5,4 +5,16 @@
 .warehouse-list-group {
     display: flex !important;
     justify-content: space-between;
-  }
+}
+
+.warehouse-h1
+{
+    padding-top: 3%;
+}
+
+.warehouse
+{
+    margin: 0 auto;
+    width: 40%;
+    min-width: 500px;
+}

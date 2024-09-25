@@ -15,7 +15,7 @@ function WarehouseButtons({ onEditClick, onDeleteClick }) {
     return (
         <div className='warehouse-button-group'>
             <ButtonGroup>
-                <Button variant='primary' onClick={(event) => handleButtonClick(event, 'edit')}>Edit</Button>
+                <Button variant='primary' onClick={(event) => handleButtonClick(event, 'edit')}>Edit Details</Button>
                 <Button variant='danger' onClick={(event) => handleButtonClick(event, 'delete')}>Delete</Button>
             </ButtonGroup>
         </div>

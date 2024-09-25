@@ -50,9 +50,10 @@ function Warehouse() {
     }
     
     return (
-        <div>
-            <h1 className="warehouse-h1">List of Warehouses</h1>
+        <div className = "warehouse">
+            <h1 className="warehouse-h1">Warehouses</h1>
             <WarehouseList warehouseList={warehouseList} fetchWarehouses={fetchWarehouses} />
+            <div style={{height:'20px'}}></div>
             <WarehouseNewSubmit onAddWarehouse={handleAddWarehouse} />
         </div>
     );

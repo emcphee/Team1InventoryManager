@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import WarehouseButtons from './WarehouseButtons';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import './css/WarehouseList.css';
 
 function WarehouseList({ warehouseList, fetchWarehouses }) {
 
@@ -105,7 +106,7 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                         className='warehouse-list-group'
                          key={warehouse.warehouseId} 
                     >
-                        <div>
+                        <div style={{width: '60%'}}>
                             {editWarehouseId === warehouse.warehouseId ? (
                                 <Form>
                                     <Form.Group controlId="formWarehouseName">
@@ -127,10 +128,9 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                                     <div>{warehouse.address}</div>
                                 </div>
                             )}
-                            <button onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
-                            <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
-                            <button onClick={() => handleUsersClick(warehouse.warehouseId)}>Users</button>
+                            <Button style={{width: '30%'}} variant='primary' onClick={(event) => handleItemClick(warehouse.warehouseId) }>Open</Button>
                         </div>
+
                         <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
                     </ListGroup.Item>
                 ))}
