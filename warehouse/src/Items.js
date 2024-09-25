@@ -1,7 +1,8 @@
 import Table from 'react-bootstrap/Table';
 import './css/Items.css';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 function Items() {
 
@@ -109,6 +110,11 @@ function Items() {
         console.log('delete', index);
     }
 
+    const navigate = useNavigate();
+    const handleLogsClick = (warehouseId) => {
+        navigate(`/warehouses/logs/${warehouseId}`);
+    };
+
     return (
         <>
         <div className="dropdown">
@@ -131,6 +137,7 @@ function Items() {
                     </div>
                 )}
             </div>
+            <button className="logs" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
         <Table bordered hover responsive className='fixed-table'>
           <thead>
             <tr>

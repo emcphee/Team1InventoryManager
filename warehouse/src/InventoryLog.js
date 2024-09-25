@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './css/InvLog.css';
 import Table from 'react-bootstrap/Table';
 
@@ -39,7 +39,15 @@ import Table from 'react-bootstrap/Table';
         }));
     }
 
+    const navigate = useNavigate();
+
+    const handleItemClick = (warehouseId) => {
+        navigate(`/warehouses/items/${warehouseId}`);
+    }
+
     return (
+        <>
+        <button className="items" onClick={() => handleItemClick(warehouseId)}>Items</button>
         <Table bordered hover responsive className='fixed-table'>
             <thead>
             <tr>
@@ -87,6 +95,7 @@ import Table from 'react-bootstrap/Table';
                 ))}
           </tbody>
         </Table>
+        </>
     );
 }
 

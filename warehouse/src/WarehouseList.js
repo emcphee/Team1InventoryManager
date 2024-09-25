@@ -23,7 +23,9 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
     }
 
     const handleLogsClick = (warehouseId) => {
-        navigate(`/warehouses/logs/${warehouseId}`);
+        if (editWarehouseId === null){
+            navigate(`/warehouses/logs/${warehouseId}`);
+        }
     };
     
     const handleEditClick = (warehouse) => {
@@ -97,7 +99,7 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                         className='warehouse-list-group'
                          key={warehouse.warehouseId} 
                     >
-                        <div onClick={() => handleItemClick(warehouse.warehouseId)} className='warehouse-item'>
+                        <div>
                             {editWarehouseId === warehouse.warehouseId ? (
                                 <Form>
                                     <Form.Group controlId="formWarehouseName">
@@ -117,10 +119,10 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                                 <div className='warehouse-name-address'>
                                     <div><strong>{warehouse.name}</strong></div>
                                     <div>{warehouse.address}</div>
-                                    <button onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
-                                    <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
                                 </div>
                             )}
+                            <button onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
+                            <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
                         </div>
                         <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
                     </ListGroup.Item>

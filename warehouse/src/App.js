@@ -84,7 +84,7 @@ function App() {
           </PrivateRoute>
         }/>
 
-        <Route path="/warehouses/:warehouseId/categories" element={
+        {/* <Route path="/warehouses/:warehouseId/categories" element={
           <PrivateRoute isLoggedIn={isLoggedIn}>
             <Categories />
           </PrivateRoute>
@@ -94,7 +94,7 @@ function App() {
           <PrivateRoute isLoggedIn={isLoggedIn}>
             <Items />
           </PrivateRoute>
-        }/>
+        }/> */}
         
         
       </Routes>
