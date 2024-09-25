@@ -7,6 +7,7 @@ import Navigationbar from './NavigationBar';
 import Warehouse from './Warehouse';
 import Items from './Items';
 import Categories from './Categories';
+import Users from './Users';
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -81,6 +82,12 @@ function App() {
         <Route path="/warehouses/items/:warehouseId/" element={
           <PrivateRoute isLoggedIn={isLoggedIn}>
             <Items />
+          </PrivateRoute>
+        }/>
+
+        <Route path="/warehouses/users/:warehouseId/" element={
+          <PrivateRoute isLoggedIn={isLoggedIn}>
+            <Users />
           </PrivateRoute>
         }/>
 

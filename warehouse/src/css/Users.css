@@ -1,0 +1,24 @@
+.fixed-table th, .fixed-table td {
+    white-space: nowrap;
+    text-align: center;  
+    vertical-align: middle; 
+}
+
+.fixed-table input {
+    width: 100%; 
+    box-sizing: border-box; 
+    text-align: center;
+    vertical-align: middle;
+}
+
+.users {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.users:hover {
+    background-color: #0056b3;
+}

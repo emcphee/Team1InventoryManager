@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 function Items() {
 
     const userType = 'admin';
+    const navigate = useNavigate();
     const { warehouseId } = useParams();
     const [itemsList, setItemsList] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
@@ -36,6 +37,14 @@ function Items() {
         };
         fetchItems();
     }, [warehouseId]);
+
+    const handleLogsClick = (warehouseId) => {
+        navigate(`/warehouses/logs/${warehouseId}`);
+    };
+
+    const handleUsersClick = (warehouseId) => {
+        navigate(`/warehouses/users/${warehouseId}`);
+    };
 
     const extractUniqueCategories = (items) => {
         const categories = new Set(); //store unique categories
@@ -110,13 +119,10 @@ function Items() {
         console.log('delete', index);
     }
 
-    const navigate = useNavigate();
-    const handleLogsClick = (warehouseId) => {
-        navigate(`/warehouses/logs/${warehouseId}`);
-    };
-
     return (
         <>
+        <button className="logs" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
+        <button className="items" onClick={() => handleUsersClick(warehouseId)}>Users</button>
         <div className="dropdown">
                 <button onClick={toggleDropdown}>
                     {selectedCategories.length > 0 ? selectedCategories.join(", ") : "Select Categories"}
@@ -137,7 +143,6 @@ function Items() {
                     </div>
                 )}
             </div>
-            <button className="logs" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
         <Table bordered hover responsive className='fixed-table'>
           <thead>
             <tr>

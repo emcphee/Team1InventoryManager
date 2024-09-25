@@ -27,6 +27,12 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
             navigate(`/warehouses/logs/${warehouseId}`);
         }
     };
+
+    const handleUsersClick = (warehouseId) => {
+        if (editWarehouseId === null){
+            navigate(`/warehouses/users/${warehouseId}`);
+        }
+    };
     
     const handleEditClick = (warehouse) => {
         setEditWarehouseId(warehouse.warehouseId);
@@ -123,6 +129,7 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                             )}
                             <button onClick={() => handleItemClick(warehouse.warehouseId)}>Items</button>
                             <button onClick={() => handleLogsClick(warehouse.warehouseId)}>Logs</button>
+                            <button onClick={() => handleUsersClick(warehouse.warehouseId)}>Users</button>
                         </div>
                         <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
                     </ListGroup.Item>

@@ -44,10 +44,14 @@ import Table from 'react-bootstrap/Table';
     const handleItemClick = (warehouseId) => {
         navigate(`/warehouses/items/${warehouseId}`);
     }
+    const handleUsersClick = (warehouseId) => {
+        navigate(`/warehouses/users/${warehouseId}`);
+    };
 
     return (
         <>
         <button className="items" onClick={() => handleItemClick(warehouseId)}>Items</button>
+        <button className="items" onClick={() => handleUsersClick(warehouseId)}>Users</button>
         <Table bordered hover responsive className='fixed-table'>
             <thead>
             <tr>
