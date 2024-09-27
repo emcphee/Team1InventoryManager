@@ -203,40 +203,24 @@ function Items() {
                 body: JSON.stringify(newItemData)
             });
     
-            // Check if the response is OK (e.g., status 200)
             if (response.ok) {
-                let createdItem = null;
-                const responseData = await response.text(); // Get response as text
-    
-                if (responseData) {
-                    // Parse only if there is response data
-                    createdItem = JSON.parse(responseData);
-                } else {
-                    // Fallback: manually create the item object since the API returns empty
-                    createdItem = {
-                        itemName: newItem.itemName,
-                        amount: newItem.amount,
-                        warehouseId: warehouseId,
-                        categories: newItem.categories // Add categories to the manually created item
-                    };
-                    console.log('Created item manually:', createdItem);
-                }
-    
+                const createdItem = await response.json();
+                // Construct the full item object with name, amount, and categories
+                const fullItem = {
+                    itemId: createdItem.itemId,
+                    itemName: newItem.itemName,
+                    amount: newItem.amount,
+                    warehouseId: warehouseId,
+                    categories: newItem.categories // Set the categories to the created item
+                };
                 // Add the new item to the list
-                setItemsList((prevItems) => [...prevItems, createdItem]);
-    
-                // Assume the item ID is generated and exists, try updating categories
-                if (createdItem.itemId) {
-                    await updateCategories(createdItem.itemId, newItem.categories, []);
-                } else {
-                    console.warn("Item ID missing, unable to update categories.");
-                }
-    
+                setItemsList((prevItems) => [...prevItems, fullItem]);
+                // Update categories with the new item's ID
+                await updateCategories(createdItem.itemId, newItem.categories, []);
                 // Reset the form and close it
                 setShowNewItemForm(false);
                 setNewItem({ itemName: '', amount: 0, categories: [] });
             } else {
-                // Handle error response from the server
                 console.error('Error creating item:', response.statusText);
                 throw new Error(`Failed to create item: ${response.statusText}`);
             }
@@ -245,6 +229,7 @@ function Items() {
         }
     };
 
+    
     const handleDelete = (index) => {
         console.log('delete', index);
     }
