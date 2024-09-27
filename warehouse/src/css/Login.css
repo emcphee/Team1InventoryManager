@@ -43,12 +43,12 @@
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #606dff;
+  background-color: #5b65d4;
   color: white;
   font-size: 16px;
   cursor: pointer;
 }
 
 .login-button:hover {
-  background-color: #4e59cc;
+  background-color: #3845d6;
 }
