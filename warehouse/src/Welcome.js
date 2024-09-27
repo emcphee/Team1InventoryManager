@@ -7,7 +7,7 @@ function App() {
         <div className = "welcome">
             <div className = "welcome-message">
                 <h2>Welcome to the Warehouse Manager</h2>
-                <p>WELCOME MESSAGE GOES HERE</p>
+                <p>The Premiere Application for managing your warehouses!</p>
             </div>
         </div>
     );
