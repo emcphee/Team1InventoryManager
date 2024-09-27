@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
  function InventoryLog() {
     
     const { warehouseId } = useParams();
+    const navigate = useNavigate();
     const [logList, setLogList] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
     const [editLog, setEditLog] = useState({ username: '', itemName: '', amount: 0, movementDate: null});
@@ -38,8 +39,6 @@ import Table from 'react-bootstrap/Table';
             [name]: value
         }));
     }
-
-    const navigate = useNavigate();
 
     const handleItemClick = (warehouseId) => {
         navigate(`/warehouses/items/${warehouseId}`);

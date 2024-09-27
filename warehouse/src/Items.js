@@ -10,15 +10,19 @@ function Items() {
     const navigate = useNavigate();
     const { warehouseId } = useParams();
     const [itemsList, setItemsList] = useState([]);
+    const [availableCategories, setAvailableCategories] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingItem, setEditingItem] = useState({ itemId: null, itemName: '', amount: 0, categories: '' });
+    const [editStock, setEditStock] = useState({amount: 0});
+    const [originalStockAmount, setOriginalStockAmount] = useState(0);
     const [uniqueCategories, setUniqueCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
-        const fetchItems = async () => {
+        const fetchData = async () => {
             try {
+                // Fetch warehouse items
                 const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
                     method: 'GET',
                     credentials: 'include'
@@ -27,16 +31,29 @@ function Items() {
                 if (response.ok) {
                     const data = await response.json();
                     setItemsList(data.items);
-                    extractUniqueCategories(data.items);
                 } else {
                     throw response;
+                }
+
+                // Fetch available categories for the warehouse
+                const categoryResponse = await fetch(`https://localhost:7271/api/Item/category?warehouseId=${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (categoryResponse.ok) {
+                    const categories = await categoryResponse.json();
+                    setAvailableCategories(categories);  // Set full list of available categories
+                } else {
+                    throw categoryResponse;
                 }
             } catch (error) {
                 console.log(error);
             }
         };
-        fetchItems();
+        fetchData();
     }, [warehouseId]);
+
 
     const handleLogsClick = (warehouseId) => {
         navigate(`/warehouses/logs/${warehouseId}`);
@@ -71,6 +88,8 @@ function Items() {
     const handleEdit = (index) => {
         setEditingIndex(index);
         setEditingItem(itemsList[index]);
+        setOriginalStockAmount(itemsList[index].amount);
+        setEditStock({ amount: itemsList[index].amount });
         setSelectedCategories(itemsList[index].categories); // Set selected categories for editing
     }
 
@@ -82,6 +101,10 @@ function Items() {
 
         // Update categories in the API
         await updateCategories(editingItem.itemId, selectedCategories, itemsList[index].categories);
+        const amountDifference = editStock.amount - originalStockAmount;
+        if (amountDifference !== 0) {
+            await changeStock(editingItem.itemId, amountDifference);
+        }
     };
 
     const updateCategories = async (itemId, newCategories, oldCategories) => {
@@ -101,6 +124,37 @@ function Items() {
                 method: 'DELETE',
                 credentials: 'include' });
         }
+    };
+
+     const changeStock = async (itemId, amount) => {
+        try {
+            const response = await fetch(`https://localhost:7271/api/StockTransaction`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                  },
+                credentials: 'include',
+                body: JSON.stringify({ itemId, amount })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setItemsList(data.items);
+                extractUniqueCategories(data.items);
+            } else {
+                throw response;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleStockChange = (e) => {
+        const { value } = e.target;
+        setEditStock((prevStock) => ({
+            ...prevStock,
+            amount: Number(value)
+        }));
     };
 
     const handleChange = (e) => {
@@ -129,14 +183,14 @@ function Items() {
                 </button>
                 {dropdownOpen && (
                     <div className="dropdown-content">
-                        {uniqueCategories.map((category, idx) => (
+                        {availableCategories.map((category, idx) => (
                             <label key={idx}>
                                 <input
                                     type="checkbox"
                                     value={category}
                                     checked={selectedCategories.includes(category)}
                                     onChange={() => handleCategoryChange(category)}
-                                /> 
+                                />
                                 {category}
                             </label>
                         ))}
@@ -165,10 +219,15 @@ function Items() {
                                     {item.itemName}
                                 </td>
                                 <td>
-                                    {item.amount}
+                                    <input
+                                            type="number"
+                                            name="amount"
+                                            value={editStock.amount}
+                                            onChange={handleStockChange}
+                                        />
                                 </td>
                                 <td>
-                                <select
+                                    <select
                                             name="categories"
                                             multiple
                                             value={editingItem.categories}
@@ -186,10 +245,10 @@ function Items() {
                                                 }));
                                             }}
                                         >
-                                            {uniqueCategories.map((category, idx) => (
+                                            {availableCategories.map((category, idx) => (
                                                 <option key={idx} value={category}>{category}</option>
                                             ))}
-                                    </select>
+                                        </select>
                                 </td>
                                 <td>
                                     <button onClick={() => handleConfirm(index)}>Confirm</button>
