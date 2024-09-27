@@ -59,7 +59,7 @@ function Users() {
         <>
         <button className="items" onClick={() => handleItemClick(warehouseId)}>Items</button>
         <button className="items" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
-        <Table bordered hover responsive className='fixed-table'>
+        <Table bordered hover responsive className='fixed-table' id="user-table">
             <thead>
             <tr>
               <th>User ID</th>
