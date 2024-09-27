@@ -18,6 +18,10 @@ function Items() {
     const [selectedCategories, setSelectedCategories] = useState([]); // For editing
     const [selectedFilterCategories, setSelectedFilterCategories] = useState([]); // For filtering
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    //Adding new items
+    const [showNewItemForm, setShowNewItemForm] = useState(false);
+    const [newItem, setNewItem] = useState({ itemName: '', amount: 0, categories: [] });
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -86,15 +90,10 @@ function Items() {
     const handleUsersClick = (warehouseId) => {
         navigate(`/warehouses/users/${warehouseId}`);
     };
-
-    // Function for handling category change in select (for editing)
-    // const handleCategoryChange = (category) => {
-    //     setSelectedCategories((prev) => 
-    //         prev.includes(category) 
-    //             ? prev.filter(c => c !== category) 
-    //             : [...prev, category]
-    //     );
-    // };
+    
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
     
     // Function for handling category change in dropdown (for filtering)
     const handleFilterCategoryChange = (category) => {
@@ -186,9 +185,64 @@ function Items() {
             amount: Number(value)
         }));
     };
-
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
+    
+    const handleCreateItem = async () => {
+        const newItemData = {
+            itemName: newItem.itemName,
+            amount: newItem.amount,
+            warehouseId: warehouseId
+        };
+    
+        try {
+            const response = await fetch('https://localhost:7271/api/Item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(newItemData)
+            });
+    
+            // Check if the response is OK (e.g., status 200)
+            if (response.ok) {
+                let createdItem = null;
+                const responseData = await response.text(); // Get response as text
+    
+                if (responseData) {
+                    // Parse only if there is response data
+                    createdItem = JSON.parse(responseData);
+                } else {
+                    // Fallback: manually create the item object since the API returns empty
+                    createdItem = {
+                        itemName: newItem.itemName,
+                        amount: newItem.amount,
+                        warehouseId: warehouseId,
+                        categories: newItem.categories // Add categories to the manually created item
+                    };
+                    console.log('Created item manually:', createdItem);
+                }
+    
+                // Add the new item to the list
+                setItemsList((prevItems) => [...prevItems, createdItem]);
+    
+                // Assume the item ID is generated and exists, try updating categories
+                if (createdItem.itemId) {
+                    await updateCategories(createdItem.itemId, newItem.categories, []);
+                } else {
+                    console.warn("Item ID missing, unable to update categories.");
+                }
+    
+                // Reset the form and close it
+                setShowNewItemForm(false);
+                setNewItem({ itemName: '', amount: 0, categories: [] });
+            } else {
+                // Handle error response from the server
+                console.error('Error creating item:', response.statusText);
+                throw new Error(`Failed to create item: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
     };
 
     const handleDelete = (index) => {
@@ -303,10 +357,60 @@ function Items() {
                         )}
                     </tr>
                 ))}
+                {/* FORM FOR CREATING NEW ITEM */}
+                {showNewItemForm && (
+                <tr>
+                    <td>
+                        {/* Empty cell for Item ID, as it will be auto-generated */}
+                    </td>
+                    <td>
+                        <input
+                            type="text"
+                            placeholder="Item Name"
+                            value={newItem.itemName}
+                            onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            placeholder="Amount"
+                            value={newItem.amount}
+                            onChange={(e) => setNewItem({ ...newItem, amount: Number(e.target.value) })}
+                        />
+                    </td>
+                    <td>
+                        <select
+                            multiple
+                            value={newItem.categories}
+                            onChange={(e) => {
+                                const options = e.target.options;
+                                const selectedCategories = [];
+                                for (let i = 0; i < options.length; i++) {
+                                    if (options[i].selected) {
+                                        selectedCategories.push(options[i].value);
+                                    }
+                                }
+                                setNewItem({ ...newItem, categories: selectedCategories });
+                            }}
+                        >
+                            {availableCategories.map((category, idx) => (
+                                <option key={idx} value={category}>{category}</option>
+                            ))}
+                        </select>
+                    </td>
+                    <td>
+                        <button onClick={handleCreateItem}>Confirm</button>
+                        <button onClick={() => setShowNewItemForm(false)}>Cancel</button>
+                    </td>
+                </tr>
+            )}
           </tbody>
         </Table>
+        <button className="logs" onClick={() => setShowNewItemForm(true)}>Add New Item</button>
         </>
     );
 }
 
 export default Items;
+
