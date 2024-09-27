@@ -48,6 +48,12 @@ function Users() {
     const handleLogsClick = (warehouseId) => {
         navigate(`/warehouses/logs/${warehouseId}`);
     };
+    
+    const permissionToName = (permissionLevel) => {
+            if(permissionLevel == 1) return 'Admin';
+            if(permissionLevel == 2) return 'Editor';
+            return 'Viewer';
+    }
 
     return (
         <>
@@ -73,14 +79,14 @@ function Users() {
                                     <input type="text" name="itemName" value={editUsers.username} onChange={handleChange} />
                                 </td>
                                 <td>
-                                    <input type="number" name="amount" value={editUsers.permission} onChange={handleChange} />
+                                    <input type="number" name="amount" value={permissionToName(editUsers.permission)} onChange={handleChange} />
                                 </td>
                             </>
                         ) : (
                             <>
                                 <td>{user.userId}</td>
                                 <td>{user.username}</td>
-                                <td>{user.permission}</td>
+                                <td>{permissionToName(user.permission)}</td>
                             </>
                         )}
                     </tr>
