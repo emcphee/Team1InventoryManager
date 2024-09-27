@@ -10,13 +10,13 @@ function Items() {
     const navigate = useNavigate();
     const { warehouseId } = useParams();
     const [itemsList, setItemsList] = useState([]);
-    const [availableCategories, setAvailableCategories] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingItem, setEditingItem] = useState({ itemId: null, itemName: '', amount: 0, categories: '' });
     const [editStock, setEditStock] = useState({amount: 0});
     const [originalStockAmount, setOriginalStockAmount] = useState(0);
-    const [uniqueCategories, setUniqueCategories] = useState([]);
-    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [availableCategories, setAvailableCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]); // For editing
+    const [selectedFilterCategories, setSelectedFilterCategories] = useState([]); // For filtering
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
@@ -63,16 +63,7 @@ function Items() {
         navigate(`/warehouses/users/${warehouseId}`);
     };
 
-    const extractUniqueCategories = (items) => {
-        const categories = new Set(); //store unique categories
-        items.forEach(item => {
-            item.categories.forEach(category => {
-                categories.add(category);
-            });
-        });
-        setUniqueCategories(Array.from(categories)); // Convert Set back to Array
-    };
-
+    // Function for handling category change in select (for editing)
     const handleCategoryChange = (category) => {
         setSelectedCategories((prev) => 
             prev.includes(category) 
@@ -80,9 +71,18 @@ function Items() {
                 : [...prev, category]
         );
     };
+    
+    // Function for handling category change in dropdown (for filtering)
+    const handleFilterCategoryChange = (category) => {
+        setSelectedFilterCategories((prev) => 
+            prev.includes(category) 
+                ? prev.filter(c => c !== category) 
+                : [...prev, category]
+        );
+    };
 
-    const filteredItems = selectedCategories.length > 0
-        ? itemsList.filter(item => item.categories.some(category => selectedCategories.includes(category)))
+    const filteredItems = selectedFilterCategories.length > 0
+        ? itemsList.filter(item => item.categories.some(category => selectedFilterCategories.includes(category)))
         : itemsList;
 
     const handleEdit = (index) => {
@@ -98,9 +98,8 @@ function Items() {
         updatedItems[index] = editingItem;
         setItemsList(updatedItems);
         setEditingIndex(null);
-
-        // Update categories in the API
-        await updateCategories(editingItem.itemId, selectedCategories, itemsList[index].categories);
+        
+        await updateCategories(editingItem.itemId, editingItem.categories, itemsList[index].categories);
         const amountDifference = editStock.amount - originalStockAmount;
         if (amountDifference !== 0) {
             await changeStock(editingItem.itemId, amountDifference);
@@ -110,19 +109,27 @@ function Items() {
     const updateCategories = async (itemId, newCategories, oldCategories) => {
         const categoriesToAdd = newCategories.filter(category => !oldCategories.includes(category));
         const categoriesToRemove = oldCategories.filter(category => !newCategories.includes(category));
-
-        // Apply new categories
+    
+        // Call the API to add new categories
         for (const category of categoriesToAdd) {
-            await fetch(`https://localhost:7271/api/Item/applyCategory/${itemId}/${category}`, { 
+            const response = await fetch(`https://localhost:7271/api/Item/applyCategory/${itemId}/${category}`, {
                 method: 'POST',
-                credentials: 'include'});
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                console.error(`Failed to add category ${category}: ${response.statusText}`);
+            }
         }
-
-        // Remove old categories
+    
+        // Call the API to remove old categories
         for (const category of categoriesToRemove) {
-            await fetch(`https://localhost:7271/api/Item/unapplyCategory/${itemId}/${category}`, {
+            const response = await fetch(`https://localhost:7271/api/Item/unapplyCategory/${itemId}/${category}`, {
                 method: 'DELETE',
-                credentials: 'include' });
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                console.error(`Failed to remove category ${category}: ${response.statusText}`);
+            }
         }
     };
 
@@ -132,7 +139,7 @@ function Items() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                  },
+                },
                 credentials: 'include',
                 body: JSON.stringify({ itemId, amount })
             });
@@ -140,7 +147,6 @@ function Items() {
             if (response.ok) {
                 const data = await response.json();
                 setItemsList(data.items);
-                extractUniqueCategories(data.items);
             } else {
                 throw response;
             }
@@ -157,14 +163,6 @@ function Items() {
         }));
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setEditingItem((prevItem) => ({
-            ...prevItem,
-            [name]: value
-        }));
-    }
-
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
@@ -179,7 +177,7 @@ function Items() {
         <button className="items" onClick={() => handleUsersClick(warehouseId)}>Users</button>
         <div className="dropdown">
                 <button onClick={toggleDropdown}>
-                    {selectedCategories.length > 0 ? selectedCategories.join(", ") : "Select Categories"}
+                    {selectedFilterCategories.length > 0 ? selectedFilterCategories.join(", ") : "Filter by Categories"}
                 </button>
                 {dropdownOpen && (
                     <div className="dropdown-content">
@@ -188,8 +186,8 @@ function Items() {
                                 <input
                                     type="checkbox"
                                     value={category}
-                                    checked={selectedCategories.includes(category)}
-                                    onChange={() => handleCategoryChange(category)}
+                                    checked={selectedFilterCategories.includes(category)}
+                                    onChange={() => handleFilterCategoryChange(category)}
                                 />
                                 {category}
                             </label>
@@ -228,27 +226,27 @@ function Items() {
                                 </td>
                                 <td>
                                     <select
-                                            name="categories"
-                                            multiple
-                                            value={editingItem.categories}
-                                            onChange={(e) => {
-                                                const options = e.target.options;
-                                                const selected = [];
-                                                for (let i = 0; i < options.length; i++) {
-                                                    if (options[i].selected) {
-                                                        selected.push(options[i].value);
-                                                    }
-                                                }
-                                                setEditingItem((prevItem) => ({
-                                                    ...prevItem,
-                                                    categories: selected
-                                                }));
-                                            }}
-                                        >
-                                            {availableCategories.map((category, idx) => (
-                                                <option key={idx} value={category}>{category}</option>
-                                            ))}
-                                        </select>
+                                        name="categories"
+                                        multiple
+                                        value={editingItem.categories}
+                                        onChange={(e) => {
+                                        const options = e.target.options;
+                                        const selected = [];
+                                        for (let i = 0; i < options.length; i++) {
+                                            if (options[i].selected) {
+                                                selected.push(options[i].value);
+                                            }
+                                        }
+                                        setEditingItem((prevItem) => ({
+                                            ...prevItem,
+                                            categories: selected
+                                        }));
+                                        }}
+                                    >
+                                        {availableCategories.map((category, idx) => (
+                                            <option key={idx} value={category}>{category}</option>
+                                        ))}
+                                    </select>
                                 </td>
                                 <td>
                                     <button onClick={() => handleConfirm(index)}>Confirm</button>
