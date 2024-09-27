@@ -54,6 +54,30 @@ function Items() {
         fetchData();
     }, [warehouseId]);
 
+    const handleEdit = (index) => {
+        setEditingIndex(index);
+        setEditingItem(itemsList[index]);
+        setOriginalStockAmount(itemsList[index].amount);
+        setEditStock({ amount: itemsList[index].amount });
+        setSelectedCategories(itemsList[index].categories); // Set selected categories for editing
+    }
+
+    const handleConfirm = async (index) => {
+        const updatedItems = [...itemsList];
+        updatedItems[index] = {
+            ...editingItem,
+            amount: editStock.amount // Set the new amount from editStock
+        };
+        setItemsList(updatedItems);
+        setEditingIndex(null);
+        
+        await updateItemName(editingItem.itemId, editingItem.itemName);
+        await updateCategories(editingItem.itemId, editingItem.categories, itemsList[index].categories);
+        const amountDifference = editStock.amount - originalStockAmount;
+        if (amountDifference !== 0) {
+            await changeStock(editingItem.itemId, amountDifference);
+        }
+    };
 
     const handleLogsClick = (warehouseId) => {
         navigate(`/warehouses/logs/${warehouseId}`);
@@ -64,13 +88,13 @@ function Items() {
     };
 
     // Function for handling category change in select (for editing)
-    const handleCategoryChange = (category) => {
-        setSelectedCategories((prev) => 
-            prev.includes(category) 
-                ? prev.filter(c => c !== category) 
-                : [...prev, category]
-        );
-    };
+    // const handleCategoryChange = (category) => {
+    //     setSelectedCategories((prev) => 
+    //         prev.includes(category) 
+    //             ? prev.filter(c => c !== category) 
+    //             : [...prev, category]
+    //     );
+    // };
     
     // Function for handling category change in dropdown (for filtering)
     const handleFilterCategoryChange = (category) => {
@@ -85,24 +109,24 @@ function Items() {
         ? itemsList.filter(item => item.categories.some(category => selectedFilterCategories.includes(category)))
         : itemsList;
 
-    const handleEdit = (index) => {
-        setEditingIndex(index);
-        setEditingItem(itemsList[index]);
-        setOriginalStockAmount(itemsList[index].amount);
-        setEditStock({ amount: itemsList[index].amount });
-        setSelectedCategories(itemsList[index].categories); // Set selected categories for editing
-    }
-
-    const handleConfirm = async (index) => {
-        const updatedItems = [...itemsList];
-        updatedItems[index] = editingItem;
-        setItemsList(updatedItems);
-        setEditingIndex(null);
-        
-        await updateCategories(editingItem.itemId, editingItem.categories, itemsList[index].categories);
-        const amountDifference = editStock.amount - originalStockAmount;
-        if (amountDifference !== 0) {
-            await changeStock(editingItem.itemId, amountDifference);
+    const updateItemName = async (itemId, itemName) => {
+        try {
+            const response = await fetch(`https://localhost:7271/api/Item/${itemId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ itemName })
+            });
+    
+            if (response.ok) {
+                console.log(`Updated item name to: ${itemName}`);
+            } else {
+                throw response;
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -214,7 +238,17 @@ function Items() {
                                     {item.itemId}
                                 </td>
                                 <td>
-                                    {item.itemName}
+                                    <input
+                                        type="text"
+                                        name="itemName"
+                                        value={editingItem.itemName} // Bind to editingItem's itemName
+                                        onChange={(e) => {
+                                            setEditingItem((prevItem) => ({
+                                                ...prevItem,
+                                                itemName: e.target.value // Update itemName as user types
+                                            }));
+                                        }}
+                                    />
                                 </td>
                                 <td>
                                     <input
