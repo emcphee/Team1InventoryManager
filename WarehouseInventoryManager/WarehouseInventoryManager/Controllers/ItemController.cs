@@ -18,11 +18,11 @@ namespace WarehouseInventoryManager.Controllers
         public IActionResult CreateItem([FromBody] ItemPostDTO model)
         {
             if (!UserHasPermission(model.WarehouseId, Permissionlevel.Editor)) return Unauthorized("You don't have permission to edit this database");
-
+            Item? item;
             try
             {
                 if (_context.Items.FirstOrDefault(item => model.WarehouseId == item.WarehouseId && model.ItemName == item.ItemName) != null) return BadRequest("Item already exists with that name");
-                var item = new Item(model.WarehouseId, model.Amount, model.ItemName);
+                item = new Item(model.WarehouseId, model.Amount, model.ItemName);
                 _context.Items.Add(item);
                 _context.SaveChanges();
             }
@@ -30,7 +30,7 @@ namespace WarehouseInventoryManager.Controllers
             {
                 return StatusCode(500, "Error adding item");
             }
-            return Ok();
+            return Ok(new { ItemId = item.ItemId });
         }
 
         [HttpDelete("{id}")]
