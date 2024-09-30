@@ -8,6 +8,7 @@ function Warehouse() {
     const { warehouseId } = useParams();
     const [warehouseList, setWarehouseList] = useState([]);
     const [permissionLevel, setPermissionLevel] = useState(null); //Permission level
+    const [isLoading, setIsLoading] = useState(true); // Track loading state
 
     const fetchWarehouses = async () => {
         try {
@@ -53,32 +54,39 @@ function Warehouse() {
     }
 
     useEffect(() => {
-        const fetchWarehousePermissionLevel = async (warehouseId) => {
+        const fetchPermissionLevel = async () => {
             try {
-                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                const response = await fetch('https://localhost:7271/api/Warehouse/list', {
                     method: 'GET',
-                    credentials: 'include' // Include cookies if needed
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
                 });
-                
                 if (response.ok) {
-                    const warehouseData = await response.json();
-                    setPermissionLevel(warehouseData.permissionLevel);
+                    const data = await response.json();
+                    // Assuming all warehouses have the same permission level, extract it from one warehouse
+                    if (data.warehouseList.length > 0) {
+                        setPermissionLevel(data.warehouseList[0].permissionLevel);
+                    }
                 } else {
-                    console.error('Failed to fetch warehouse data:', response.statusText);
+                    console.error('Error fetching permission level:', response.statusText);
                 }
             } catch (error) {
-                console.error('Error fetching warehouse data:', error);
+                console.error('Error fetching permission level:', error);
+            } finally {
+                setIsLoading(false); // Stop loading when request is complete
             }
         };
-        fetchWarehousePermissionLevel(warehouseId);
-    }, [warehouseId]);
+        fetchPermissionLevel();
+    }, []);
     
     return (
         <div className = "warehouse">
             <h1 className="warehouse-h1">Warehouses</h1>
             <WarehouseList warehouseList={warehouseList} fetchWarehouses={fetchWarehouses} />
             <div style={{height:'20px'}}></div>
-            {permissionLevel == 2 && (
+            {permissionLevel == 1 && (
                 <WarehouseNewSubmit onAddWarehouse={handleAddWarehouse} />
             )}
         </div>

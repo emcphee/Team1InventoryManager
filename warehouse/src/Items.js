@@ -73,8 +73,8 @@ function Items() {
                 console.error('Error fetching warehouse data:', error);
             }
         };
-        fetchData();
         fetchWarehousePermissionLevel(warehouseId);
+        fetchData();
     }, [warehouseId]);
 
     const handleEdit = (index) => {
