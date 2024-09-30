@@ -229,6 +229,7 @@ function Items() {
             console.log('Error:', error);
         }
     };
+    
     useEffect(() => {
         const fetchWarehousePermissionLevel = async (warehouseId) => {
             try {

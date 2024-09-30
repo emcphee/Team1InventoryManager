@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import WarehouseButtons from './WarehouseButtons';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +8,8 @@ import './css/WarehouseList.css';
 
 function WarehouseList({ warehouseList, fetchWarehouses }) {
 
+    const { warehouseId } = useParams();
+    const [permissionLevel, setPermissionLevel] = useState(null); //Permission level
     const [editWarehouseId, setEditWarehouseId] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -98,6 +100,27 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
         setEditWarehouseId(null);
     }
 
+    useEffect(() => {
+        const fetchWarehousePermissionLevel = async (warehouseId) => {
+            try {
+                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies if needed
+                });
+                
+                if (response.ok) {
+                    const warehouseData = await response.json();
+                    setPermissionLevel(warehouseData.permissionLevel);
+                } else {
+                    console.error('Failed to fetch warehouse data:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching warehouse data:', error);
+            }
+        };
+        fetchWarehousePermissionLevel(warehouseId);
+    }, [warehouseId]);
+
     return (
         <>
             <ListGroup variant='flush'>
@@ -130,8 +153,9 @@ function WarehouseList({ warehouseList, fetchWarehouses }) {
                             )}
                             <Button style={{width: '30%'}} variant='primary' onClick={(event) => handleItemClick(warehouse.warehouseId) }>Open</Button>
                         </div>
-
-                        <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
+                        {permissionLevel === 1 && (
+                            <WarehouseButtons onEditClick={() => handleEditClick(warehouse)} onDeleteClick={() => handleDeleteClick(warehouse)} />
+                        )}
                     </ListGroup.Item>
                 ))}
             </ListGroup>
