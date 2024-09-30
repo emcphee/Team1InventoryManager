@@ -248,9 +248,28 @@ function Items() {
         }
     };
 
-    const handleDelete = (index) => {
-        console.log('delete', index);
-    }
+    const handleDelete = async (itemId) => {
+        try {
+            const response = await fetch(`https://localhost:7271/api/Item/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include' // Include credentials if necessary
+            });
+
+            if (response.ok) {
+                // Remove the item from the list if the deletion is successful
+                setItemsList((prevItems) => prevItems.filter(item => item.itemId !== itemId));
+                console.log(`Item with ID ${itemId} has been deleted.`);
+            } else {
+                console.error(`Failed to delete item with ID ${itemId}:`, response.statusText);
+                throw new Error(`Failed to delete item: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.log('Error deleting item:', error);
+        }
+    };
 
     return (
         <>
@@ -353,7 +372,7 @@ function Items() {
                                 {(permissionLevel === 1 || permissionLevel === 2) && (
                                     <td>
                                         <button onClick={() => handleEdit(index)}>Edit</button>
-                                        <button onClick={() => handleDelete(index)}>Delete</button>
+                                        <button onClick={() => handleDelete(item.itemId)}>Delete</button>
                                     </td>
                                 )}
                             </>
