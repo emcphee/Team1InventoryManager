@@ -6,7 +6,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 function Items() {
 
-    const userType = 'admin';
     const navigate = useNavigate();
     const { warehouseId } = useParams();
     const [itemsList, setItemsList] = useState([]);
@@ -21,7 +20,8 @@ function Items() {
     //Adding new items
     const [showNewItemForm, setShowNewItemForm] = useState(false);
     const [newItem, setNewItem] = useState({ itemName: '', amount: 0, categories: [] });
-    const [permissionLevel, setPermissionLevel] = useState(null); //Permission level
+    //Permission Level
+    const [permissionLevel, setPermissionLevel] = useState(null);
     //Adding and Removing Categories
     const [newCategory, setNewCategory] = useState('');
     const [removeCategory, setRemoveCategory] = useState('');
