@@ -117,7 +117,7 @@ namespace WarehouseInventoryManager.Controllers
             var query = from warehouse in _context.Warehouses
                         join permission in _context.UserPermissions
                         on warehouse.WarehouseId equals permission.WarehouseId
-                        where permission.UserId == 1
+                        where permission.UserId == CurrentUser.UserId
                         select new WarehouseGetDTO
                         {
                             WarehouseId = warehouse.WarehouseId,
