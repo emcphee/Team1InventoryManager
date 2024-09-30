@@ -21,6 +21,7 @@ function Items() {
     //Adding new items
     const [showNewItemForm, setShowNewItemForm] = useState(false);
     const [newItem, setNewItem] = useState({ itemName: '', amount: 0, categories: [] });
+    const [permissionLevel, setPermissionLevel] = useState(null); //Permission level
     
 
     useEffect(() => {
@@ -228,8 +229,28 @@ function Items() {
             console.log('Error:', error);
         }
     };
-
+    useEffect(() => {
+        const fetchWarehousePermissionLevel = async (warehouseId) => {
+            try {
+                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies if needed
+                });
+                
+                if (response.ok) {
+                    const warehouseData = await response.json();
+                    setPermissionLevel(warehouseData.permissionLevel);
+                } else {
+                    console.error('Failed to fetch warehouse data:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching warehouse data:', error);
+            }
+        };
+        fetchWarehousePermissionLevel(warehouseId);
+    }, [warehouseId]);
     
+
     const handleDelete = (index) => {
         console.log('delete', index);
     }
@@ -265,7 +286,7 @@ function Items() {
               <th>Item Name</th>
               <th>Amount</th>
               <th>Category</th>
-              {userType === 'admin' && <th>Actions</th>}
+              {(permissionLevel === 1 || permissionLevel === 2) && (<th>Actions</th>)}
             </tr>
             </thead>
             <tbody>
@@ -332,7 +353,7 @@ function Items() {
                                 <td>{item.itemName}</td>
                                 <td>{item.amount}</td>
                                 <td>{item.categories.length === 0 ? "No category" : item.categories.join(", ")}</td>
-                                {userType === 'admin' && (
+                                {(permissionLevel === 1 || permissionLevel === 2) && (
                                     <td>
                                         <button onClick={() => handleEdit(index)}>Edit</button>
                                         <button onClick={() => handleDelete(index)}>Delete</button>
@@ -392,7 +413,9 @@ function Items() {
             )}
           </tbody>
         </Table>
+        {(permissionLevel === 1 || permissionLevel === 2) && (
         <button className="logs" onClick={() => setShowNewItemForm(true)}>Add New Item</button>
+        )}
         </>
     );
 }
