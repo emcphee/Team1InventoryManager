@@ -22,60 +22,67 @@ function Items() {
     const [showNewItemForm, setShowNewItemForm] = useState(false);
     const [newItem, setNewItem] = useState({ itemName: '', amount: 0, categories: [] });
     const [permissionLevel, setPermissionLevel] = useState(null); //Permission level
+    //Adding and Removing Categories
+    const [newCategory, setNewCategory] = useState('');
+    const [removeCategory, setRemoveCategory] = useState('');
+    const [showAddCategoryInput, setShowAddCategoryInput] = useState(false);
+    const [showRemoveCategoryInput, setShowRemoveCategoryInput] = useState(false);
     
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch warehouse items
-                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setItemsList(data.items);
-                } else {
-                    throw response;
-                }
-
-                // Fetch available categories for the warehouse
-                const categoryResponse = await fetch(`https://localhost:7271/api/Item/category?warehouseId=${warehouseId}`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (categoryResponse.ok) {
-                    const categories = await categoryResponse.json();
-                    setAvailableCategories(categories);  // Set full list of available categories
-                } else {
-                    throw categoryResponse;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        const fetchWarehousePermissionLevel = async (warehouseId) => {
-            try {
-                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies if needed
-                });
-                
-                if (response.ok) {
-                    const warehouseData = await response.json();
-                    setPermissionLevel(warehouseData.permissionLevel);
-                } else {
-                    console.error('Failed to fetch warehouse data:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching warehouse data:', error);
-            }
-        };
         fetchWarehousePermissionLevel(warehouseId);
         fetchData();
     }, [warehouseId]);
+
+    const fetchWarehousePermissionLevel = async (warehouseId) => {
+        try {
+            const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                method: 'GET',
+                credentials: 'include' // Include cookies if needed
+            });
+            
+            if (response.ok) {
+                const warehouseData = await response.json();
+                setPermissionLevel(warehouseData.permissionLevel);
+            } else {
+                console.error('Failed to fetch warehouse data:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching warehouse data:', error);
+        }
+    };
+
+    const fetchData = async () => {
+        try {
+            // Fetch warehouse items
+            const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setItemsList(data.items);
+            } else {
+                throw response;
+            }
+
+            // Fetch available categories for the warehouse
+            const categoryResponse = await fetch(`https://localhost:7271/api/Item/category?warehouseId=${warehouseId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (categoryResponse.ok) {
+                const categories = await categoryResponse.json();
+                setAvailableCategories(categories);  // Set full list of available categories
+            } else {
+                throw categoryResponse;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleEdit = (index) => {
         setEditingIndex(index);
@@ -271,6 +278,60 @@ function Items() {
         }
     };
 
+    const handleAddCategory = async () => {
+        if (!newCategory) return; // Ensure a category is provided
+
+        try {
+            const response = await fetch(`https://localhost:7271/api/Item/category/${warehouseId}/${newCategory}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                console.log(`Category "${newCategory}" added successfully.`);
+                setNewCategory(''); // Clear the input after success
+                await fetchData(); // Fetch updated categories
+            } else {
+                console.error(`Failed to add category: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.log('Error adding category:', error);
+        }
+    };
+
+    const handleRemoveCategory = async () => {
+        if (!removeCategory) return; // Ensure a category is provided
+
+        try {
+            const response = await fetch(`https://localhost:7271/api/Item/category/${warehouseId}/${removeCategory}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                console.log(`Category "${removeCategory}" removed successfully.`);
+                setRemoveCategory(''); // Clear the input after success
+                await fetchData(); // Fetch updated categories
+            } else {
+                console.error(`Failed to remove category: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.log('Error removing category:', error);
+        }
+    };
+
+
+
+
+
+
+
     return (
         <>
         <button className="logs" onClick={() => handleLogsClick(warehouseId)}>Logs</button>
@@ -295,6 +356,34 @@ function Items() {
                     </div>
                 )}
             </div>
+            <button className="items" onClick={() => setShowAddCategoryInput(!showAddCategoryInput)}>
+                {showAddCategoryInput ? 'Close Add Category' : 'Add Category'}
+            </button>
+            <button className="items" onClick={() => setShowRemoveCategoryInput(!showRemoveCategoryInput)}>
+                {showRemoveCategoryInput ? 'Close Remove Category' : 'Remove Category'}
+            </button>
+            {showAddCategoryInput && (
+                <div>
+                    <input
+                        type="text"
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        placeholder="Enter new category"
+                    />
+                    <button onClick={handleAddCategory}>Submit</button>
+                </div>
+            )}
+            {showRemoveCategoryInput && (
+                <div>
+                    <input
+                        type="text"
+                        value={removeCategory}
+                        onChange={(e) => setRemoveCategory(e.target.value)}
+                        placeholder="Enter category to remove"
+                    />
+                    <button onClick={handleRemoveCategory}>Submit</button>
+                </div>
+            )}
         <Table bordered hover responsive className='fixed-table'>
           <thead>
             <tr>
@@ -430,7 +519,7 @@ function Items() {
           </tbody>
         </Table>
         {(permissionLevel === 1 || permissionLevel === 2) && (
-        <button className="logs" onClick={() => setShowNewItemForm(true)}>Add New Item</button>
+            <button className="logs" onClick={() => setShowNewItemForm(true)}>Add New Item</button>
         )}
         </>
     );
