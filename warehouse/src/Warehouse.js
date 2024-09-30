@@ -78,8 +78,8 @@ function Warehouse() {
             <h1 className="warehouse-h1">Warehouses</h1>
             <WarehouseList warehouseList={warehouseList} fetchWarehouses={fetchWarehouses} />
             <div style={{height:'20px'}}></div>
-            {permissionLevel === 1 && (
-            <WarehouseNewSubmit onAddWarehouse={handleAddWarehouse} />
+            {permissionLevel == 2 && (
+                <WarehouseNewSubmit onAddWarehouse={handleAddWarehouse} />
             )}
         </div>
     );

@@ -56,7 +56,25 @@ function Items() {
                 console.log(error);
             }
         };
+        const fetchWarehousePermissionLevel = async (warehouseId) => {
+            try {
+                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies if needed
+                });
+                
+                if (response.ok) {
+                    const warehouseData = await response.json();
+                    setPermissionLevel(warehouseData.permissionLevel);
+                } else {
+                    console.error('Failed to fetch warehouse data:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching warehouse data:', error);
+            }
+        };
         fetchData();
+        fetchWarehousePermissionLevel(warehouseId);
     }, [warehouseId]);
 
     const handleEdit = (index) => {
@@ -229,28 +247,6 @@ function Items() {
             console.log('Error:', error);
         }
     };
-    
-    useEffect(() => {
-        const fetchWarehousePermissionLevel = async (warehouseId) => {
-            try {
-                const response = await fetch(`https://localhost:7271/api/Warehouse/${warehouseId}`, {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies if needed
-                });
-                
-                if (response.ok) {
-                    const warehouseData = await response.json();
-                    setPermissionLevel(warehouseData.permissionLevel);
-                } else {
-                    console.error('Failed to fetch warehouse data:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching warehouse data:', error);
-            }
-        };
-        fetchWarehousePermissionLevel(warehouseId);
-    }, [warehouseId]);
-    
 
     const handleDelete = (index) => {
         console.log('delete', index);
