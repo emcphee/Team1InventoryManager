@@ -355,35 +355,39 @@ function Items() {
                         ))}
                     </div>
                 )}
-            </div>
-            <button className="items" onClick={() => setShowAddCategoryInput(!showAddCategoryInput)}>
-                {showAddCategoryInput ? 'Close Add Category' : 'Add Category'}
-            </button>
-            <button className="items" onClick={() => setShowRemoveCategoryInput(!showRemoveCategoryInput)}>
-                {showRemoveCategoryInput ? 'Close Remove Category' : 'Remove Category'}
-            </button>
-            {showAddCategoryInput && (
-                <div>
-                    <input
-                        type="text"
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        placeholder="Enter new category"
-                    />
-                    <button onClick={handleAddCategory}>Submit</button>
-                </div>
-            )}
-            {showRemoveCategoryInput && (
-                <div>
-                    <input
-                        type="text"
-                        value={removeCategory}
-                        onChange={(e) => setRemoveCategory(e.target.value)}
-                        placeholder="Enter category to remove"
-                    />
-                    <button onClick={handleRemoveCategory}>Submit</button>
-                </div>
-            )}
+        </div>
+        {(permissionLevel === 1 || permissionLevel === 2) && (
+            <span>
+                <button className="items" onClick={() => setShowAddCategoryInput(!showAddCategoryInput)}>
+                    {showAddCategoryInput ? 'Close Add Category' : 'Add Category'}
+                    {showAddCategoryInput && (
+                    <div>
+                        <input
+                            type="text"
+                            value={newCategory}
+                            onChange={(e) => setNewCategory(e.target.value)}
+                            placeholder="Enter new category"
+                        />
+                        <button onClick={handleAddCategory}>Submit</button>
+                    </div>
+                )}
+                </button>
+                <button className="items" onClick={() => setShowRemoveCategoryInput(!showRemoveCategoryInput)}>
+                    {showRemoveCategoryInput ? 'Close Remove Category' : 'Remove Category'}
+                    {showRemoveCategoryInput && (
+                        <div>
+                            <input
+                                type="text"
+                                value={removeCategory}
+                                onChange={(e) => setRemoveCategory(e.target.value)}
+                                placeholder="Enter category to remove"
+                            />
+                            <button onClick={handleRemoveCategory}>Submit</button>
+                        </div>
+                    )}
+                </button>
+            </span>
+        )}
         <Table bordered hover responsive className='fixed-table'>
           <thead>
             <tr>
