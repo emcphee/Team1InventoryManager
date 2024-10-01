@@ -360,8 +360,12 @@ function Items() {
             <span>
                 <button className="items" onClick={() => setShowAddCategoryInput(!showAddCategoryInput)}>
                     {showAddCategoryInput ? 'Close Add Category' : 'Add Category'}
-                    {showAddCategoryInput && (
-                    <div>
+                </button>
+                <button className="items" onClick={() => setShowRemoveCategoryInput(!showRemoveCategoryInput)}>
+                    {showRemoveCategoryInput ? 'Close Remove Category' : 'Remove Category'}
+                </button>
+                {showAddCategoryInput && (
+                    <span>
                         <input
                             type="text"
                             value={newCategory}
@@ -369,23 +373,19 @@ function Items() {
                             placeholder="Enter new category"
                         />
                         <button onClick={handleAddCategory}>Submit</button>
-                    </div>
+                    </span>
                 )}
-                </button>
-                <button className="items" onClick={() => setShowRemoveCategoryInput(!showRemoveCategoryInput)}>
-                    {showRemoveCategoryInput ? 'Close Remove Category' : 'Remove Category'}
-                    {showRemoveCategoryInput && (
-                        <div>
-                            <input
-                                type="text"
-                                value={removeCategory}
-                                onChange={(e) => setRemoveCategory(e.target.value)}
-                                placeholder="Enter category to remove"
-                            />
-                            <button onClick={handleRemoveCategory}>Submit</button>
-                        </div>
-                    )}
-                </button>
+                {showRemoveCategoryInput && (
+                    <span>
+                        <input
+                            type="text"
+                            value={removeCategory}
+                            onChange={(e) => setRemoveCategory(e.target.value)}
+                            placeholder="Enter category to remove"
+                        />
+                        <button onClick={handleRemoveCategory}>Submit</button>
+                    </span>
+                )}
             </span>
         )}
         <Table bordered hover responsive className='fixed-table'>

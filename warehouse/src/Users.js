@@ -87,7 +87,7 @@ function Users() {
             if (response.ok) {
                 console.log(`Permission updated successfully for user ${userId}`);
                 await fetchUsers(); // Refresh the users list
-                setEditIndex(null);  // Exit edit mode
+                setEditIndex(null);
             } else {
                 console.error('Failed to update permission:', response.statusText);
             }
@@ -242,29 +242,31 @@ function Users() {
                     ))}
             </tbody>
         </Table>
-        <button className="items" onClick={() => setAddUserFormVisible((prev) => !prev)}>
-            {isAddUserFormVisible ? 'Cancel' : 'Add User'}
-        </button>
-        {isAddUserFormVisible && (
-            <div>
-                <input
-                    type="text"
-                    placeholder="User ID"
-                    value={newUserId}
-                    onChange={(e) => setNewUserId(e.target.value)}
-                />
-                <select
-                    value={newUserPermission}
-                    onChange={(e) => setNewUserPermission(Number(e.target.value))}
-                >
-                    <option value={1}>Admin</option>
-                    <option value={2}>Editor</option>
-                    <option value={3}>Viewer</option>
-                </select>
-                <button onClick={handleAddUser}>Add User</button>
-                <button onClick={() => setAddUserFormVisible(false)}>Cancel</button>
-            </div>
-        )}
+        <div style={{margin: '0 auto'}}>
+            <button className="items" onClick={() => setAddUserFormVisible((prev) => !prev)}>
+                {isAddUserFormVisible ? 'Cancel' : 'Add User'}
+            </button>
+            {isAddUserFormVisible && (
+                <div>
+                    <input
+                        type="text"
+                        placeholder="User ID"
+                        value={newUserId}
+                        onChange={(e) => setNewUserId(e.target.value)}
+                    />
+                    <select
+                        value={newUserPermission}
+                        onChange={(e) => setNewUserPermission(Number(e.target.value))}
+                    >
+                        <option value={1}>Admin</option>
+                        <option value={2}>Editor</option>
+                        <option value={3}>Viewer</option>
+                    </select>
+                    <button onClick={handleAddUser}>Add User</button>
+                    <button onClick={() => setAddUserFormVisible(false)}>Cancel</button>
+                </div>
+            )}
+        </div>
         </>
     );
 
